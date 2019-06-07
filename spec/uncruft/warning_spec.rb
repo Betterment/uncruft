@@ -12,6 +12,11 @@ describe Uncruft::Warning do
     Warning.warn('oh no, you should worry')
   end
 
+  it "excepts kwargs from Kernel.warn" do
+    warn('oh no, you should worry', uplevel: 1)
+    Kernel.warn('oh no, you should worry', uplevel: 1)
+  end
+
   context 'when warning includes the word "deprecation" or "deprecated"' do
     it 'treats it as a deprecation warning' do
       expect(ActiveSupport::Deprecation).to receive(:warn).and_return('banana').exactly(6).times
