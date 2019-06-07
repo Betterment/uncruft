@@ -12,7 +12,7 @@ describe Uncruft::Warning do
     Warning.warn('oh no, you should worry')
   end
 
-  it "excepts kwargs from Kernel.warn" do
+  it "accepts kwargs from Kernel.warn" do
     warn('oh no, you should worry', uplevel: 1)
     Kernel.warn('oh no, you should worry', uplevel: 1)
   end
