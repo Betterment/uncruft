@@ -2,7 +2,7 @@ module Uncruft
   module Warning
     DEPRECATION_PATTERN = /(deprecation|deprecated)/i
 
-    def warn(str)
+    def warn(str, *args)
       if str =~ DEPRECATION_PATTERN # rubocop:disable Performance/RegexpMatch
         message = strip_caller_info(str, caller_locations(1..1).first).strip
         ActiveSupport::Deprecation.warn(message)
