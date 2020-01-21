@@ -15,7 +15,7 @@ module Uncruft
     private
 
     def handle_unknown_deprecation!(message, line_number)
-      if Uncruft.whitelist_deprecations?
+      if Uncruft.record_deprecations?
         known_deprecations << message
         write_deprecations_file!
       else

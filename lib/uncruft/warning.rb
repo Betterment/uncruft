@@ -1,6 +1,6 @@
 module Uncruft
   module Warning
-    DEPRECATION_PATTERN = /(deprecation|deprecated)/i
+    DEPRECATION_PATTERN = /(deprecation|deprecated)/i.freeze
 
     def warn(str, *args)
       if str =~ DEPRECATION_PATTERN # rubocop:disable Performance/RegexpMatch

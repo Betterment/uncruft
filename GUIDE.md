@@ -14,7 +14,7 @@ Of course, if the recommendation is opaque or nonexistent, you may need to reach
 
 #### When you changed something, and nearby code stopped working
 
-Occasionally, when code is modified or refactored, file names and line numbers of preexisting pieces of code will change. This will break any deprecations that may already be included by this gem's whitelist, and as such will cause existing code to fail in seemingly new ways.
+Occasionally, when code is modified or refactored, file names and caller information of preexisting pieces of code will change. This may break any deprecations that were already written to your app's ignorefile, and as such will cause existing code to fail in seemingly new ways.
 
 In such a situation, the best course of action is to fix the offending code so that it avoids encountering the deprecation warning altogether. Even though you didn't introduce the failure, by fixing it you will have moved your app that much closer to running on the next Rails version.
 
@@ -26,4 +26,4 @@ Often, errors can be resolved by simply upgrading to a newer version of the gem,
 
 #### When fixing the issue is too costly
 
-As a last resort, and if reworking the offending code (or upgrading the gem) would be prohibitively time-consuming, you may ignore the warning by rerunning the offending test/code with `WHITELIST_DEPRECATIONS=1` in your environment. (See [the README](https://github.com/Betterment/uncruft#whitelisting-deprecations) for further instructions.)
+As a last resort, and if reworking the offending code (or upgrading the gem) would be prohibitively time-consuming, you may ignore the warning by rerunning the offending test/code with `RECORD_DEPRECATIONS=1` in your environment. (See [the README](https://github.com/Betterment/uncruft#recording-deprecations) for further instructions.)

@@ -20,6 +20,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'appraisal', '~> 2.2.0'
   s.add_development_dependency 'rails'
   s.add_development_dependency 'rspec', '~> 3.7.0'
-  s.add_development_dependency 'rubocop-betterment', '~> 1.1.1'
+  s.add_development_dependency 'rubocop-betterment'
   s.add_development_dependency 'timecop', '~> 0.9.1'
 end

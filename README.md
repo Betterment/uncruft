@@ -23,21 +23,21 @@ By default, deprecation warnings will cause your application to raise exceptions
 
 The exception message will include the original deprecation warning, plus a link to [our troubleshooting guide](https://github.com/Betterment/uncruft/blob/master/GUIDE.md), to assist with resolving deprecations as they are encountered.
 
-## Whitelisting Deprecations
+## Recording Deprecations
 
-When testing on a new Rails version for the first time, you will undoubtedly encounter many new warnings. As such, you can quickly whitelist all existing deprecation warnings encountered during your test suite like so:
-
-```bash
-WHITELIST_DEPRECATIONS=1 rake
-```
-
-You can also incrementally add new warnings to the whitelist as you encounter them:
+When testing on a new Rails version for the first time, you will undoubtedly encounter many new warnings. As such, you can quickly record all existing deprecation warnings encountered during your test suite like so:
 
 ```bash
-WHITELIST_DEPRECATIONS=1 rspec path/to/my/failing/spec.rb
+RECORD_DEPRECATIONS=1 rake
 ```
 
-This will generate (or add to) a whitelist of warnings at `config/deprecations.ignore`. Any warning in that file will be ignored when next encountered.
+This will generate (or add to) an ignorefile of warnings at `config/deprecations.ignore`. Any warning in that file will be ignored when next encountered.
+
+You can also incrementally add new warnings to the ignorefile as you encounter them:
+
+```bash
+RECORD_DEPRECATIONS=1 rspec path/to/my/failing/spec.rb
+```
 
 ## How to Contribute
 

@@ -8,8 +8,8 @@ module Uncruft
     # http://api.rubyonrails.org/classes/ActiveModel/Type/Boolean.html
     FALSE_VALUES = [false, 0, "0", "f", "F", "false", "FALSE", "off", "OFF"].to_set
 
-    def whitelist_deprecations?
-      ENV['WHITELIST_DEPRECATIONS'].presence && !FALSE_VALUES.include?(ENV['WHITELIST_DEPRECATIONS'])
+    def record_deprecations?
+      ENV['RECORD_DEPRECATIONS'].presence && !FALSE_VALUES.include?(ENV['RECORD_DEPRECATIONS'])
     end
 
     def ignorefile_path
