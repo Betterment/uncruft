@@ -31,7 +31,7 @@ When testing on a new Rails version for the first time, you will undoubtedly enc
 RECORD_DEPRECATIONS=1 rake
 ```
 
-This will generate (or add to) a ignorefile of warnings at `config/deprecations.ignore`. Any warning in that file will be ignored when next encountered.
+This will generate (or add to) an ignorefile of warnings at `config/deprecations.ignore`. Any warning in that file will be ignored when next encountered.
 
 You can also incrementally add new warnings to the ignorefile as you encounter them:
 
