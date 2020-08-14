@@ -5,7 +5,7 @@ RSpec.describe Uncruft::DeprecateAttribute do
 
   subject { klass.new }
 
-  describe '#deprecate_attribute' do
+  describe '.deprecate_attribute' do
     context 'when aliased_attribute is present' do
       let(:klass) do
         Class.new do
@@ -19,22 +19,34 @@ RSpec.describe Uncruft::DeprecateAttribute do
         end
       end
 
-      it 'applies deprecation warning when setting and getting deprecated attribute' do
-        expect(ActiveSupport::Deprecation).to receive(:warn)
+      it 'applies deprecation warning when setting deprecated attribute' do
+        expect(ActiveSupport::Deprecation).to receive(:warn).once
           .with("Please stop using this attribute, use this other attribute instead!")
 
         expect(subject.first_name = my_name).to eq my_name
+      end
 
-        expect(ActiveSupport::Deprecation).to receive(:warn)
+      it 'applies deprecation warning when getting deprecated attribute' do
+        subject.instance_variable_set(:@first_name, my_name)
+
+        expect(ActiveSupport::Deprecation).to receive(:warn).once
           .with("Please stop using this attribute, use this other attribute instead!")
 
         expect(subject.first_name).to eq my_name
       end
 
-      it 'returns attribute when setting and getting aliased_attribute' do
+      it 'returns attribute when setting aliased_attribute' do
         expect(subject.legal_first_name = my_name).to eq my_name
 
+        expect(ActiveSupport::Deprecation).not_to receive(:warn)
+      end
+
+      it 'returns attribute when getting aliased_attribute' do
+        subject.instance_variable_set(:@first_name, my_name)
+
         expect(subject.legal_first_name).to eq my_name
+
+        expect(ActiveSupport::Deprecation).not_to receive(:warn)
       end
     end
 
@@ -50,11 +62,15 @@ RSpec.describe Uncruft::DeprecateAttribute do
         end
       end
 
-      it 'applies deprecation warning when setting and getting deprecated attribute' do
-        expect(ActiveSupport::Deprecation).to receive(:warn)
+      it 'applies deprecation warning when setting deprecated attribute' do
+        expect(ActiveSupport::Deprecation).to receive(:warn).once
           .with("Please stop using this attribute!")
 
         expect(subject.first_name = my_name).to eq my_name
+      end
+
+      it 'applies deprecation warning when getting deprecated attribute' do
+        subject.instance_variable_set(:@first_name, my_name)
 
         expect(ActiveSupport::Deprecation).to receive(:warn)
           .with("Please stop using this attribute!")
