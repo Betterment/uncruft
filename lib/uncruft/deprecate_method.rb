@@ -1,23 +1,18 @@
 module Uncruft
-  module DeprecateAttribute
+  module DeprecateMethod
     extend ActiveSupport::Concern
 
     module ClassMethods
-      def deprecate_attribute(attribute, aliased_attribute: nil, message:)
-        if aliased_attribute.present?
-          alias_method aliased_attribute, attribute
-          alias_method "#{aliased_attribute}=", "#{attribute}="
-        end
-
+      def deprecate_method(method, message:)
         deprecated_methods = Module.new
 
         deprecated_methods.module_eval do
-          define_method attribute do
+          define_method method do
             ActiveSupport::Deprecation.warn(message)
             super()
           end
 
-          define_method "#{attribute}=" do |value|
+          define_method "#{method}=" do |value|
             ActiveSupport::Deprecation.warn(message)
             super(value)
           end

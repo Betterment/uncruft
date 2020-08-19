@@ -39,9 +39,9 @@ You can also incrementally add new warnings to the ignorefile as you encounter t
 RECORD_DEPRECATIONS=1 rspec path/to/my/failing/spec.rb
 ```
 
-## Deprecating Attributes
+## Deprecating Methods
 
-If you would like to deprecate an attribute by aliasing it to a new attribute and applying an `ActiveSupport::Deprecation` warning on the deprecated attribute's getters and setters then look no further, we have a tool for that! Simply include `Uncruft::DeprecateAttribute` in your class, identify the attribute you would like deprecated, the attribute you would like aliased, and finally a message you would like applied to the deprecation warning.
+If you would like to deprecate a method by applying an `ActiveSupport::Deprecation` warning on the deprecated method's getters and setters then look no further, we have a tool for that! Simply include `Uncruft::DeprecateMethod` in your class, identify the method you would like deprecated and provide a message you would like applied to the deprecation warning.
 
 ```ruby
 class Customer < ActiveRecord::Base
@@ -50,7 +50,6 @@ class Customer < ActiveRecord::Base
   attr_accessor :first_name
 
   deprecate_attribute(:first_name,
-                      aliased_attribute: :legal_first_name,
                       message: "Please stop using first_name it is deprecated, please use legal_first_name instead!")
 end
 ```
