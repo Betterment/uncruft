@@ -44,10 +44,14 @@ RECORD_DEPRECATIONS=1 rspec path/to/my/failing/spec.rb
 If you would like to deprecate an attribute by applying a `ActiveSupport::Deprecation` warning on the deprecated attribute's getters and setters then look no further, we have a tool for that! Simply include `Uncruft::Deprecatable` in your class, identify the attribute you would like deprecated and provide a message you would like applied to the deprecation warning.
 
 ```ruby
-class Customer < ActiveRecord::Base
+class Customer
   include Uncruft::Deprecatable
 
   attr_accessor :first_name
+
+  def initialize(first_name)
+    @first_name = first_name
+  end
 
   deprecate_attribute(:first_name,
                       message: "Please stop using first_name it is deprecated, please use legal_first_name instead!")
