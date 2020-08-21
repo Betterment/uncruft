@@ -39,13 +39,13 @@ You can also incrementally add new warnings to the ignorefile as you encounter t
 RECORD_DEPRECATIONS=1 rspec path/to/my/failing/spec.rb
 ```
 
-## Deprecating Attributes
+## Deprecating Attributes and Methods
 
-If you would like to deprecate an attribute by applying a `ActiveSupport::Deprecation` warning on the deprecated attribute's getters and setters then look no further, we have a tool for that! Simply include `Uncruft::DeprecateAttribute` in your class, identify the attribute you would like deprecated and provide a message you would like applied to the deprecation warning.
+If you would like to deprecate an attribute by applying a `ActiveSupport::Deprecation` warning on the deprecated attribute's getters and setters then look no further, we have a tool for that! Simply include `Uncruft::Deprecatable` in your class, identify the attribute you would like deprecated and provide a message you would like applied to the deprecation warning.
 
 ```ruby
 class Customer < ActiveRecord::Base
-  include Uncruft::DeprecateAttribute
+  include Uncruft::Deprecatable
 
   attr_accessor :first_name
 
@@ -54,7 +54,7 @@ class Customer < ActiveRecord::Base
 end
 ```
 
-Within the `Uncruft::DeprecateAttribute` module there is also a `.deprecate_method` method that can be used to apply a deprecation warning to an identified method, much like the `deprecate_attribute` method described above.
+Within the `Uncruft::Deprecatable` module there is also a `.deprecate_method` method that can be used to apply a deprecation warning to an identified method, much like the `deprecate_attribute` method described above.
 
 From there you can use Uncruft's deprecation recording tools to generate ingorefiles and manage your deprecation backlog in an organized manner.
 

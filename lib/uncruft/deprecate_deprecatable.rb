@@ -1,5 +1,5 @@
 module Uncruft
-  module DeprecateAttribute
+  module Deprecatable
     extend ActiveSupport::Concern
 
     module ClassMethods

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe Uncruft::DeprecateAttribute do
+RSpec.describe Uncruft::Deprecatable do
   let(:my_name) { "Jess" }
 
   subject { klass.new }
@@ -8,7 +8,7 @@ RSpec.describe Uncruft::DeprecateAttribute do
   describe '.deprecate_attribute' do
     let(:klass) do
       Class.new do
-        include Uncruft::DeprecateAttribute
+        include Uncruft::Deprecatable
 
         attr_accessor :first_name
 
@@ -37,7 +37,7 @@ RSpec.describe Uncruft::DeprecateAttribute do
   describe '.deprecate_method' do
     let(:klass) do
       Class.new do
-        include Uncruft::DeprecateAttribute
+        include Uncruft::Deprecatable
 
         def legacy_method
           "Hello Old World!"
