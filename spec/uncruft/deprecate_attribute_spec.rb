@@ -1,18 +1,18 @@
 require 'spec_helper'
 
-RSpec.describe Uncruft::DeprecateMethod do
+RSpec.describe Uncruft::DeprecateAttribute do
   let(:my_name) { "Jess" }
 
   subject { klass.new }
 
-  describe '.deprecate_method' do
+  describe '.deprecate_attribute' do
     let(:klass) do
       Class.new do
-        include Uncruft::DeprecateMethod
+        include Uncruft::DeprecateAttribute
 
         attr_accessor :first_name
 
-        deprecate_method(:first_name,
+        deprecate_attribute(:first_name,
           message: "Please stop using this attribute!")
       end
     end
@@ -31,6 +31,28 @@ RSpec.describe Uncruft::DeprecateMethod do
         .with("Please stop using this attribute!")
 
       expect(subject.first_name).to eq my_name
+    end
+  end
+
+  describe '.deprecate_method' do
+    let(:klass) do
+      Class.new do
+        include Uncruft::DeprecateAttribute
+
+        def legacy_method
+          "Hello Old World!"
+        end
+
+        deprecate_method(:legacy_method,
+          message: "Please stop using this method!")
+      end
+    end
+
+    it 'applies deprecation warning when calling the deprecated method' do
+      expect(ActiveSupport::Deprecation).to receive(:warn)
+        .with("Please stop using this method!")
+
+      expect(subject.legacy_method).to eq "Hello Old World!"
     end
   end
 end
