@@ -1,6 +1,7 @@
 require 'uncruft/version'
 require 'uncruft/railtie'
 require 'uncruft/deprecation_handler'
+require 'uncruft/deprecatable'
 require 'uncruft/warning'
 
 module Uncruft
