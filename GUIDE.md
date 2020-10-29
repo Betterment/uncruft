@@ -1,3 +1,5 @@
+**Heads up:** Make sure you're on the [latest version](https://github.com/Betterment/uncruft/releases/latest) of `uncruft` before following these instructions!
+
 # Fixing Deprecations
 
 Here's what to do when you encounter a new error caused by a deprecation warning.
