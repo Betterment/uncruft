@@ -86,7 +86,7 @@ module Uncruft
         To resolve this error, adjust your code according to the instructions above.
         If you did not introduce this error or are unsure why you are seeing it,
         you will find additional guidance at the URL below:
-        https://github.com/Betterment/uncruft/blob/master/GUIDE.md
+        https://github.com/Betterment/uncruft/blob/main/GUIDE.md
       ERROR
     end
 
