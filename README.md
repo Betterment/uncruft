@@ -21,7 +21,7 @@ Then run `bundle install`.
 
 By default, deprecation warnings will cause your application to raise exceptions in `test` and `development` modes.
 
-The exception message will include the original deprecation warning, plus a link to [our troubleshooting guide](https://github.com/Betterment/uncruft/blob/master/GUIDE.md), to assist with resolving deprecations as they are encountered.
+The exception message will include the original deprecation warning, plus a link to [our troubleshooting guide](https://github.com/Betterment/uncruft/blob/main/GUIDE.md), to assist with resolving deprecations as they are encountered.
 
 ## Recording Deprecations
 
