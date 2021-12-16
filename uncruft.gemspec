@@ -11,6 +11,9 @@ Gem::Specification.new do |s|
   s.summary     = 'A library to assist with Rails upgrades'
   s.description = 'A library to assist with clearing out Rails deprecation warnings and upgrading Rails versions'
   s.license     = 'MIT'
+  s.metadata = {
+    'rubygems_mfa_required' => 'true',
+  }
 
   s.files = Dir['{lib}/**/*', 'LICENSE', 'Rakefile', 'README.md']
   s.test_files = Dir['spec/**/*']
@@ -24,7 +27,4 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rails'
   s.add_development_dependency 'rspec', '~> 3.7.0'
   s.add_development_dependency 'timecop', '~> 0.9.1'
-  s.metadata = {
-    'rubygems_mfa_required' => 'true',
-  }
 end
