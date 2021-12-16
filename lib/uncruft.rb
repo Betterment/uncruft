@@ -10,11 +10,11 @@ module Uncruft
     FALSE_VALUES = [false, 0, "0", "f", "F", "false", "FALSE", "off", "OFF"].to_set
 
     def record_deprecations?
-      ENV['RECORD_DEPRECATIONS'].presence && !FALSE_VALUES.include?(ENV['RECORD_DEPRECATIONS'])
+      ENV['RECORD_DEPRECATIONS'].presence && !ENV['RECORD_DEPRECATIONS'].in?(FALSE_VALUES)
     end
 
     def ignorefile_path
-      ENV['UNCRUFT_IGNOREFILE_PATH'] || Rails.root.join('config', 'deprecations.ignore')
+      ENV['UNCRUFT_IGNOREFILE_PATH'] || Rails.root.join('config/deprecations.ignore')
     end
   end
 end
