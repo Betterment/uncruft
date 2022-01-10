@@ -13,7 +13,7 @@ RSpec.describe Uncruft::Deprecatable do
         attr_accessor :first_name
 
         deprecate_attribute(:first_name,
-          message: "Please stop using this attribute!")
+                            message: "Please stop using this attribute!")
       end
     end
 
@@ -44,7 +44,7 @@ RSpec.describe Uncruft::Deprecatable do
         end
 
         deprecate_method(:legacy_method,
-          message: "Please stop using this method!")
+                         message: "Please stop using this method!")
       end
     end
 

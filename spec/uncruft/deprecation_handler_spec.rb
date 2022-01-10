@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 RSpec.describe Uncruft::DeprecationHandler do
-  let(:ignorefile_path) { Rails.root.join('config', 'deprecations.ignore') }
+  let(:ignorefile_path) { Rails.root.join('config/deprecations.ignore') }
 
   before do
     File.delete(ignorefile_path) if File.exist?(ignorefile_path)
@@ -10,7 +10,7 @@ RSpec.describe Uncruft::DeprecationHandler do
   subject { described_class.new }
 
   describe '#call' do
-    let(:absolute_path) { Rails.root.join('chicken', 'nuggets.rb') }
+    let(:absolute_path) { Rails.root.join('chicken/nuggets.rb') }
     let(:line_number) { 123 }
     let(:caller_label) { '<something>' }
     let(:message) { "Warning: BAD called from #{caller_label} at #{absolute_path}:#{line_number}" }
@@ -104,14 +104,14 @@ RSpec.describe Uncruft::DeprecationHandler do
       end
 
       context 'when gem is vendored' do
-        let(:absolute_path) { Rails.root.join('vendor', 'cache', 'chicken', 'nuggets.rb') }
+        let(:absolute_path) { Rails.root.join('vendor/cache/chicken/nuggets.rb') }
 
         it 'sanitizes the message and raises an error' do
           expect { subject.call(message, '') }.to raise_error(RuntimeError, expected_error_message)
         end
 
         context 'when gem is vendored elsewhere' do
-          let(:absolute_path) { Rails.root.join('..', '..', 'vendor', 'cache', 'chicken', 'nuggets.rb') }
+          let(:absolute_path) { Rails.root.join('../../vendor/cache/chicken/nuggets.rb') }
 
           it 'sanitizes the message and raises an error' do
             expect { subject.call(message, '') }.to raise_error(RuntimeError, expected_error_message)

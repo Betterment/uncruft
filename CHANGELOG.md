@@ -11,6 +11,17 @@ and this project aims to adhere to [Semantic Versioning](http://semver.org/spec/
 ### Removed <!-- for now removed features. -->
 ### Fixed <!-- for any bug fixes. -->
 
+## [0.3.0] - 2021-12-16
+### Added
+- Official support for Ruby 2.7 and 3.0
+- Official support for Rails 6.2 and 7.0
+### Fixed
+- An issue with `warn(...)` and Ruby 3.0's keyword arguments
+- Miscellaneous test/linter issues affecting just the gem's test suite
+### Removed
+- Drops support for Rails < 5.2
+- Drops support for Ruby < 2.6
+
 ## [0.2.1] - 2021-09-03
 ### Changed
 - Changes the default CI build branch to `main`, and updates links in GUIDE.md
@@ -44,6 +55,7 @@ and this project aims to adhere to [Semantic Versioning](http://semver.org/spec/
 - Initial open source commit! This gem has been used internally at Betterment
   for almost a year, and we've decided to open source it!
 
+[0.3.0]: https://github.com/betterment/uncruft/compare/v0.2.1...v0.3.0
 [0.2.1]: https://github.com/betterment/uncruft/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/betterment/uncruft/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/betterment/uncruft/compare/v0.0.2...v0.1.0

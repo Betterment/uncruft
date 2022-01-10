@@ -1,3 +1,7 @@
 inherit_gem:
-  rubocop-betterment:
+  betterlint:
     - config/default.yml
+
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 2.6

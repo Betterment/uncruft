@@ -11,15 +11,20 @@ Gem::Specification.new do |s|
   s.summary     = 'A library to assist with Rails upgrades'
   s.description = 'A library to assist with clearing out Rails deprecation warnings and upgrading Rails versions'
   s.license     = 'MIT'
+  s.metadata = {
+    'rubygems_mfa_required' => 'true',
+  }
 
   s.files = Dir['{lib}/**/*', 'LICENSE', 'Rakefile', 'README.md']
   s.test_files = Dir['spec/**/*']
 
-  s.add_dependency 'railties', '>= 4.2.0'
+  s.required_ruby_version = '>= 2.6.0'
+
+  s.add_dependency 'railties', '>= 5.2.0'
 
   s.add_development_dependency 'appraisal', '~> 2.2.0'
+  s.add_development_dependency 'betterlint'
   s.add_development_dependency 'rails'
   s.add_development_dependency 'rspec', '~> 3.7.0'
-  s.add_development_dependency 'rubocop-betterment'
   s.add_development_dependency 'timecop', '~> 0.9.1'
 end

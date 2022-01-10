@@ -95,14 +95,12 @@ module Uncruft
     end
 
     def known_deprecations
-      @known_deprecations ||= begin
-        if known_deprecations_file_exists?
-          file = File.read(Uncruft.ignorefile_path)
-          JSON.parse(file)['ignored_warnings'].to_set
-        else
-          Set.new
-        end
-      end
+      @known_deprecations ||= if known_deprecations_file_exists?
+                                file = File.read(Uncruft.ignorefile_path)
+                                JSON.parse(file)['ignored_warnings'].to_set
+                              else
+                                Set.new
+                              end
     end
 
     def file_content(deprecations)

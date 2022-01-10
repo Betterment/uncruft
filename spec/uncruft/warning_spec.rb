@@ -32,13 +32,13 @@ describe Uncruft::Warning do
       it 'strips out the path so that ActiveSupport::Deprecation can append a new one' do
         path = caller_locations(0..0).first.path
 
-        expect(ActiveSupport::Deprecation).to receive(:warn).with('foo is deprecated!').and_return('hurray')
+        allow(ActiveSupport::Deprecation).to receive(:warn).with('foo is deprecated!').and_return('hurray')
         expect(warn("#{path}: foo is deprecated!")).to eq('hurray')
 
-        expect(ActiveSupport::Deprecation).to receive(:warn).with('[DEPRECATION] bar is no more.').and_return('huzzah')
+        allow(ActiveSupport::Deprecation).to receive(:warn).with('[DEPRECATION] bar is no more.').and_return('huzzah')
         expect(Kernel.warn("[DEPRECATION] bar is no more. #{path}:#{caller_locations(0..0).first.lineno}")).to eq('huzzah')
 
-        expect(ActiveSupport::Deprecation).to receive(:warn).with('Deprecation detected: banana --').and_return('we do our best...')
+        allow(ActiveSupport::Deprecation).to receive(:warn).with('Deprecation detected: banana --').and_return('we do our best...')
         expect(Warning.warn("Deprecation detected: banana -- #{caller(0..0).first}")).to eq('we do our best...')
       end
     end

@@ -30,7 +30,7 @@ RSpec.describe Uncruft do
 
   describe '.ignorefile_path' do
     it 'uses rails root' do
-      expect(described_class.ignorefile_path).to eq(Rails.root.join('config', 'deprecations.ignore'))
+      expect(described_class.ignorefile_path).to eq(Rails.root.join('config/deprecations.ignore'))
     end
 
     context 'when env var is set' do
