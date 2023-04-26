@@ -41,9 +41,11 @@ module Uncruft
 
     def normalize_callstack_path(message)
       if (gem_home = gem_home(message)).present?
-        message.gsub(gem_home, '$GEM_PATH')
-      elsif (absolute_path = absolute_path(message)).present?
-        message.gsub(absolute_path, relative_path(absolute_path))
+        message.gsub!(gem_home, '$GEM_PATH')
+      end
+
+      if (absolute_path = absolute_path(message)).present?
+        message.gsub!(absolute_path, relative_path(absolute_path))
       end
     end
 
@@ -64,7 +66,7 @@ module Uncruft
     end
 
     def gem_home(message)
-      message.match(%r{called from( .+ at)? (#{ENV['GEM_HOME']}/(.+/)*gems)})&.[](2)
+      message.match(%r{(?i:called) from( .+ at)? (#{ENV.fetch('GEM_HOME', nil)}/(.+/)*gems)})&.[](2)
     end
 
     def absolute_path(message)
