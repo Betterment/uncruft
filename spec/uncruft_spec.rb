@@ -4,25 +4,25 @@ RSpec.describe Uncruft do
   describe '.record_deprecations?' do
     it 'handles common truthy and falsy values' do
       allow(ENV).to receive(:[]).with('RECORD_DEPRECATIONS').and_return('1')
-      expect(described_class.record_deprecations?).to eq true
+      expect(described_class.record_deprecations?).to be true
       allow(ENV).to receive(:[]).with('RECORD_DEPRECATIONS').and_return('t')
-      expect(described_class.record_deprecations?).to eq true
+      expect(described_class.record_deprecations?).to be true
       allow(ENV).to receive(:[]).with('RECORD_DEPRECATIONS').and_return('T')
-      expect(described_class.record_deprecations?).to eq true
+      expect(described_class.record_deprecations?).to be true
       allow(ENV).to receive(:[]).with('RECORD_DEPRECATIONS').and_return('true')
-      expect(described_class.record_deprecations?).to eq true
+      expect(described_class.record_deprecations?).to be true
       allow(ENV).to receive(:[]).with('RECORD_DEPRECATIONS').and_return('TRUE')
-      expect(described_class.record_deprecations?).to eq true
+      expect(described_class.record_deprecations?).to be true
       allow(ENV).to receive(:[]).with('RECORD_DEPRECATIONS').and_return('0')
-      expect(described_class.record_deprecations?).to eq false
+      expect(described_class.record_deprecations?).to be false
       allow(ENV).to receive(:[]).with('RECORD_DEPRECATIONS').and_return('f')
-      expect(described_class.record_deprecations?).to eq false
+      expect(described_class.record_deprecations?).to be false
       allow(ENV).to receive(:[]).with('RECORD_DEPRECATIONS').and_return('F')
-      expect(described_class.record_deprecations?).to eq false
+      expect(described_class.record_deprecations?).to be false
       allow(ENV).to receive(:[]).with('RECORD_DEPRECATIONS').and_return('false')
-      expect(described_class.record_deprecations?).to eq false
+      expect(described_class.record_deprecations?).to be false
       allow(ENV).to receive(:[]).with('RECORD_DEPRECATIONS').and_return('FALSE')
-      expect(described_class.record_deprecations?).to eq false
+      expect(described_class.record_deprecations?).to be false
       allow(ENV).to receive(:[]).with('RECORD_DEPRECATIONS').and_return('')
       expect(described_class.record_deprecations?).to be_nil
     end

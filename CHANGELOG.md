@@ -11,6 +11,14 @@ and this project aims to adhere to [Semantic Versioning](http://semver.org/spec/
 ### Removed <!-- for now removed features. -->
 ### Fixed <!-- for any bug fixes. -->
 
+## [0.3.1] - 2023-04-26
+### Fixed
+- Some ruby warnings included gem paths that weren't being normalized by the
+  regex matchers
+- Some ruby warnings included both gem paths and absolute paths and we were
+  only normalizing one but not the other
+- Fixed some rubocop linter rules
+
 ## [0.3.0] - 2021-12-16
 ### Added
 - Official support for Ruby 2.7 and 3.0
@@ -55,6 +63,7 @@ and this project aims to adhere to [Semantic Versioning](http://semver.org/spec/
 - Initial open source commit! This gem has been used internally at Betterment
   for almost a year, and we've decided to open source it!
 
+[0.3.1]: https://github.com/betterment/uncruft/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/betterment/uncruft/compare/v0.2.1...v0.3.0
 [0.2.1]: https://github.com/betterment/uncruft/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/betterment/uncruft/compare/v0.1.0...v0.2.0

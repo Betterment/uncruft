@@ -4,7 +4,7 @@ RSpec.describe Uncruft::DeprecationHandler do
   let(:ignorefile_path) { Rails.root.join('config/deprecations.ignore') }
 
   before do
-    File.delete(ignorefile_path) if File.exist?(ignorefile_path)
+    FileUtils.rm_f(ignorefile_path)
   end
 
   subject { described_class.new }
@@ -144,9 +144,7 @@ RSpec.describe Uncruft::DeprecationHandler do
       end
 
       before do
-        File.open(ignorefile_path, 'w') do |f|
-          f.write file_content
-        end
+        File.write(ignorefile_path, file_content)
       end
 
       it 'does not raise an error and leaves the file intact' do
