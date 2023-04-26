@@ -66,7 +66,7 @@ module Uncruft
     end
 
     def gem_home(message)
-      message.match(%r{(?i:called) from( .+ at)? (#{ENV.fetch('GEM_HOME', nil)}/(.+/)*gems)})&.[](2)
+      message.match(%r{(?i:called) from( .+ at)? (#{ENV['GEM_HOME']}/(.+/)*gems)})&.[](2) # rubocop:disable Style/FetchEnvVar
     end
 
     def absolute_path(message)
