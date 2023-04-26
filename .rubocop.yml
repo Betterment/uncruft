@@ -2,6 +2,9 @@ inherit_gem:
   betterlint:
     - config/default.yml
 
+Gemspec/DevelopmentDependencies:
+  Enabled: false
+
 AllCops:
   NewCops: enable
   TargetRubyVersion: 2.6

@@ -28,11 +28,7 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
-    - name: Run linter
-      env:
-        BUNDLE_GEMFILE: ${{ matrix.gemfile }}
-      run: bundle exec rubocop --parallel
-    - name: Run tests
+    - name: Run linter and tests
       env:
         BUNDLE_GEMFILE: ${{ matrix.gemfile }}
       run: bundle exec rake
