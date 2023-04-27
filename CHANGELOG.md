@@ -11,6 +11,11 @@ and this project aims to adhere to [Semantic Versioning](http://semver.org/spec/
 ### Removed <!-- for now removed features. -->
 ### Fixed <!-- for any bug fixes. -->
 
+## [0.3.3] - 2023-04-27
+### Fixed
+- Some ruby warnings included vendored bin paths that weren't being normalized by the
+  regex matchers
+
 ## [0.3.2] - 2023-04-27
 ### Fixed
 - Some ruby warnings included ruby home / bin paths that weren't being normalized by the

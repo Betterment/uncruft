@@ -82,7 +82,7 @@ RSpec.describe Uncruft::DeprecationHandler do
       end
     end
 
-    context 'when caller is from ruby_home path' do
+    context 'when caller is from bin dir' do
       let(:caller_label) { '<global scope>' }
       let(:absolute_path) { '/Users/banana/.rbenv/versions/3.0.5/bin/rake' }
       let(:bin_dir) { '/Users/banana/.rbenv/versions/3.0.5/bin' }
@@ -91,6 +91,16 @@ RSpec.describe Uncruft::DeprecationHandler do
       before do
         allow(RbConfig::CONFIG).to receive(:[]).with('bindir').and_return bin_dir
       end
+
+      it 'sanitizes the message and raises an error' do
+        expect { subject.call(message, '') }.to raise_error(RuntimeError, expected_error_message)
+      end
+    end
+
+    context 'when caller is from vendored bin dir' do
+      let(:caller_label) { '<global scope>' }
+      let(:absolute_path) { Rails.root.join('vendor/bundle/ruby/3.0.0/bin/rake') }
+      let(:expected_ignorefile_entry) { 'Warning: BAD called from <global scope> at $BIN_PATH/rake' }
 
       it 'sanitizes the message and raises an error' do
         expect { subject.call(message, '') }.to raise_error(RuntimeError, expected_error_message)
