@@ -44,6 +44,10 @@ module Uncruft
         message.gsub!(gem_home, '$GEM_PATH')
       end
 
+      if message.include?(bin_dir)
+        message.gsub!(bin_dir, '$BIN_PATH')
+      end
+
       if (absolute_path = absolute_path(message)).present?
         message.gsub!(absolute_path, relative_path(absolute_path))
       end
@@ -79,6 +83,10 @@ module Uncruft
         .gsub(%r{\A(../)*vendor/cache}, '$GEM_PATH')
     rescue ArgumentError # When `relative_path_from` cannot find a relative path.
       absolute_path
+    end
+
+    def bin_dir
+      RbConfig::CONFIG['bindir']
     end
 
     def error_message(message, line_number)

@@ -82,6 +82,21 @@ RSpec.describe Uncruft::DeprecationHandler do
       end
     end
 
+    context 'when caller is from ruby_home path' do
+      let(:caller_label) { '<global scope>' }
+      let(:absolute_path) { '/Users/banana/.rbenv/versions/3.0.5/bin/rake' }
+      let(:bin_dir) { '/Users/banana/.rbenv/versions/3.0.5/bin' }
+      let(:expected_ignorefile_entry) { 'Warning: BAD called from <global scope> at $BIN_PATH/rake' }
+
+      before do
+        allow(RbConfig::CONFIG).to receive(:[]).with('bindir').and_return bin_dir
+      end
+
+      it 'sanitizes the message and raises an error' do
+        expect { subject.call(message, '') }.to raise_error(RuntimeError, expected_error_message)
+      end
+    end
+
     context 'when message includes custom gem path' do
       let(:absolute_path) { Pathname.new('/banana/banana/banana/gems/chicken/nuggets.rb') }
       let(:expected_ignorefile_entry) { "Warning: BAD called from <something> at $GEM_PATH/chicken/nuggets.rb" }
