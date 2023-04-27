@@ -85,10 +85,11 @@ RSpec.describe Uncruft::DeprecationHandler do
     context 'when caller is from ruby_home path' do
       let(:caller_label) { '<global scope>' }
       let(:absolute_path) { '/Users/banana/.rbenv/versions/3.0.5/bin/rake' }
-      let(:expected_ignorefile_entry) { 'Warning: BAD called from <global scope> at bin/rake' }
+      let(:bin_dir) { '/Users/banana/.rbenv/versions/3.0.5/bin' }
+      let(:expected_ignorefile_entry) { 'Warning: BAD called from <global scope> at $BIN_PATH/rake' }
 
       before do
-        allow(RbConfig::CONFIG).to receive(:[]).with('bindir').and_return absolute_path
+        allow(RbConfig::CONFIG).to receive(:[]).with('bindir').and_return bin_dir
       end
 
       it 'sanitizes the message and raises an error' do

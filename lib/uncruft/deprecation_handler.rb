@@ -44,8 +44,8 @@ module Uncruft
         message.gsub!(gem_home, '$GEM_PATH')
       end
 
-      if (ruby_home = ruby_home(message)).present?
-        message.gsub!(ruby_home, bin_path(ruby_home))
+      if message.include?(bin_dir)
+        message.gsub!(bin_dir, '$BIN_PATH')
       end
 
       if (absolute_path = absolute_path(message)).present?
@@ -85,12 +85,8 @@ module Uncruft
       absolute_path
     end
 
-    def ruby_home(message)
-      absolute_path(message) if message.include? RbConfig::CONFIG['bindir']
-    end
-
-    def bin_path(ruby_home)
-      ruby_home.split('/').last(2).join('/')
+    def bin_dir
+      RbConfig::CONFIG['bindir']
     end
 
     def error_message(message, line_number)
