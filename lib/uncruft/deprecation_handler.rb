@@ -81,6 +81,7 @@ module Uncruft
       Pathname.new(absolute_path)
         .relative_path_from(Rails.root).to_s
         .gsub(%r{\A(../)*vendor/cache}, '$GEM_PATH')
+        .gsub(%r{\A(vendor/bundle/ruby/\d\.\d\.\d/bin)}, '$BIN_PATH')
     rescue ArgumentError # When `relative_path_from` cannot find a relative path.
       absolute_path
     end
