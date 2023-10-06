@@ -31,6 +31,8 @@ jobs:
           - ruby: 2.7
             gemfile: gemfiles/rails_7_0.gemfile
           - ruby: 2.6
+            gemfile: gemfiles/rails_7_1.gemfile
+          - ruby: 2.6
             gemfile: gemfiles/rails_7_0.gemfile
 
     steps:
