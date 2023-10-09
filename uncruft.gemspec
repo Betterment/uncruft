@@ -20,10 +20,4 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 2.6.0'
 
   s.add_dependency 'railties', '>= 5.2.0'
-
-  s.add_development_dependency 'appraisal', '~> 2.2.0'
-  s.add_development_dependency 'betterlint'
-  s.add_development_dependency 'rails'
-  s.add_development_dependency 'rspec', '~> 3.7.0'
-  s.add_development_dependency 'timecop', '~> 0.9.1'
 end
