@@ -9,6 +9,10 @@ module Uncruft
         strategies.unshift(DeprecationHandler.new)
         config.active_support.deprecation = strategies
       end
+
+      initializer "uncruft.deprecator" do |app|
+        app.deprecators[:uncruft] = Uncruft.deprecator
+      end
     end
   end
 end
