@@ -4,6 +4,7 @@ require 'active_support'
 require 'active_support/time'
 
 require 'uncruft/version'
+require 'uncruft/deprecator'
 require 'uncruft/railtie'
 require 'uncruft/deprecation_handler'
 require 'uncruft/deprecatable'

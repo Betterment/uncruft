@@ -15,7 +15,7 @@ module Uncruft
 
         prepended_method.module_eval do
           define_method method do |*args, &block|
-            ActiveSupport::Deprecation.warn(message)
+            Uncruft.deprecator.warn(message)
             super(*args, &block)
           end
         end
