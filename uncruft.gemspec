@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 $LOAD_PATH.push File.expand_path('lib', __dir__)
 
 require 'uncruft/version'
@@ -17,7 +19,7 @@ Gem::Specification.new do |s|
 
   s.files = Dir['{lib}/**/*', 'LICENSE', 'Rakefile', 'README.md']
 
-  s.required_ruby_version = '>= 2.6.0'
+  s.required_ruby_version = '>= 3.2.2'
 
   s.add_dependency 'railties', '>= 5.2.0'
 end
