@@ -13,8 +13,8 @@ and this project aims to adhere to [Semantic Versioning](http://semver.org/spec/
 
 ## [0.4.0] - 2024-01-02
 ### Removed <!-- for now removed features. -->
-- Drops support for Rails < 7.0
-- Drops support for Ruby < 3.2
+- Drops support for Rails < 6.1
+- Drops support for Ruby < 3.0
 
 ## [0.3.3] - 2023-04-27
 ### Fixed
