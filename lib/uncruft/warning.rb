@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module Uncruft
   module Warning
-    DEPRECATION_PATTERN = /(deprecation|deprecated)/i.freeze
+    DEPRECATION_PATTERN = /(deprecation|deprecated)/i
 
     def warn(str, *args, **kwargs)
       if str =~ DEPRECATION_PATTERN # rubocop:disable Performance/RegexpMatch

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Uncruft
   module Deprecatable
     extend ActiveSupport::Concern

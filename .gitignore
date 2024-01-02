@@ -7,5 +7,3 @@ spec/dummy/db/*.sqlite3
 spec/dummy/config/deprecations.ignore
 doc/
 .yardoc/
-Gemfile.lock
-/gemfiles/*.gemfile.lock

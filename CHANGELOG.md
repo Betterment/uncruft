@@ -11,6 +11,11 @@ and this project aims to adhere to [Semantic Versioning](http://semver.org/spec/
 ### Removed <!-- for now removed features. -->
 ### Fixed <!-- for any bug fixes. -->
 
+## [0.4.0] - 2024-01-02
+### Removed <!-- for now removed features. -->
+- Drops support for Rails < 6.1
+- Drops support for Ruby < 3.0
+
 ## [0.3.3] - 2023-04-27
 ### Fixed
 - Some ruby warnings included vendored bin paths that weren't being normalized by the
