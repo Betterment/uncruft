@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gemspec
 
-gem 'appraisal', '~> 2.2.0'
+gem 'appraisal'
 gem 'betterlint'
 gem 'rails'
 gem 'rspec'
