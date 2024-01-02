@@ -6,7 +6,7 @@ module Uncruft
 
     module ClassMethods
       def deprecate_attribute(attribute, message:)
-        deprecate_method(attribute, message: message)
+        deprecate_method attribute, message: message
         deprecate_method :"#{attribute}=", message: message
       end
 
