@@ -44,6 +44,10 @@ module Uncruft
         message.gsub!(gem_home, '$GEM_PATH')
       end
 
+      if (user_install = user_install(message)).present?
+        message.gsub!(user_install, '$GEM_PATH')
+      end
+
       if message.include?(bin_dir)
         message.gsub!(bin_dir, '$BIN_PATH')
       end
@@ -70,7 +74,11 @@ module Uncruft
     end
 
     def gem_home(message)
-      message.match(%r{(?i:c)alled from( .+ at)? (#{ENV['GEM_HOME']}/(.+/)*gems)})&.[](2) # rubocop:disable Style/FetchEnvVar
+      message.match(%r{(?i:c)alled from( .+ at)? (#{ENV.fetch('GEM_HOME', nil)}/(.+/)*gems)})&.[](2).presence
+    end
+
+    def user_install(message)
+      message.match(%r{(?i:c)alled from( .+ at)? (#{Gem.user_dir}/(.+/)*gems)})&.[](2).presence
     end
 
     def absolute_path(message)
