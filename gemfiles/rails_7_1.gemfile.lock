@@ -1,7 +1,7 @@
 PATH
   remote: ..
   specs:
-    uncruft (0.4.0)
+    uncruft (0.5.0)
       railties (>= 6.1.0)
 
 GEM

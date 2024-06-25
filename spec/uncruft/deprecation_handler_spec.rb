@@ -91,6 +91,7 @@ RSpec.describe Uncruft::DeprecationHandler do
       let(:expected_ignorefile_entry) { 'Warning: BAD called from <global scope> at $BIN_PATH/rake' }
 
       before do
+        allow(RbConfig::CONFIG).to receive(:[]).and_call_original
         allow(RbConfig::CONFIG).to receive(:[]).with('bindir').and_return bin_dir
       end
 
@@ -114,8 +115,9 @@ RSpec.describe Uncruft::DeprecationHandler do
       let(:expected_ignorefile_entry) { "Warning: BAD called from <something> at $GEM_PATH/chicken/nuggets.rb" }
 
       before do
-        allow(ENV).to receive(:[]).and_call_original
-        allow(ENV).to receive(:[]).with('GEM_HOME').and_return('/banana/banana/banana')
+        allow(ENV).to receive(:fetch).and_call_original
+        allow(ENV).to receive(:fetch).with('GEM_HOME', nil).and_return('/banana/banana/banana')
+        allow(Gem).to receive(:user_dir).and_return('/apple/apple/apple')
       end
 
       it 'sanitizes the message and raises an error' do
@@ -124,6 +126,14 @@ RSpec.describe Uncruft::DeprecationHandler do
 
       context 'when gem home is nested' do
         let(:absolute_path) { Pathname.new('/banana/banana/banana/arbitrary/gem/path/gems/chicken/nuggets.rb') }
+
+        it 'sanitizes the message and raises an error' do
+          expect { subject.call(message, '') }.to raise_error(RuntimeError, expected_error_message)
+        end
+      end
+
+      context 'when gem is installed in the --user-install path' do
+        let(:absolute_path) { Pathname.new('/apple/apple/apple/ohno/gems/chicken/nuggets.rb') }
 
         it 'sanitizes the message and raises an error' do
           expect { subject.call(message, '') }.to raise_error(RuntimeError, expected_error_message)
