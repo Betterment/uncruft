@@ -21,5 +21,9 @@ module Uncruft
     def ignorefile_path
       ENV['UNCRUFT_IGNOREFILE_PATH'] || Rails.root.join('config/deprecations.ignore')
     end
+
+    def deprecator
+      @deprecator ||= ActiveSupport::Deprecation.new(Uncruft::VERSION, "Uncruft")
+    end
   end
 end

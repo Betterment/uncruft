@@ -115,17 +115,19 @@ module Uncruft
 
     def known_deprecations
       @known_deprecations ||= if known_deprecations_file_exists?
-                                file = File.read(Uncruft.ignorefile_path)
-                                JSON.parse(file)['ignored_warnings'].to_set
-                              else
-                                Set.new
-                              end
+        file = File.read(Uncruft.ignorefile_path)
+        JSON.parse(file)['ignored_warnings'].to_set
+      else
+        Set.new
+      end
     end
 
     def file_content(deprecations)
-      JSON.pretty_generate ignored_warnings: deprecations.sort,
-                           updated: now,
-                           rails_version: Rails::VERSION::STRING
+      JSON.pretty_generate(
+        ignored_warnings: deprecations.sort,
+        updated: now,
+        rails_version: Rails::VERSION::STRING,
+      )
     end
 
     def now

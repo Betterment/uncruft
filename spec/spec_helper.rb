@@ -11,9 +11,7 @@ RSpec.configure do |config|
   config.run_all_when_everything_filtered = true
   config.example_status_persistence_file_path = 'spec/examples.txt'
 
-  config.around(:all) do |example|
-    Time.use_zone(ActiveSupport::TimeZone.all.first) do
-      example.run
-    end
+  config.around(:each) do |example|
+    Time.use_zone(ActiveSupport::TimeZone.all.first, &example)
   end
 end

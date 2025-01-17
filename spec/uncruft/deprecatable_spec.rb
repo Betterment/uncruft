@@ -14,13 +14,12 @@ RSpec.describe Uncruft::Deprecatable do
 
         attr_accessor :first_name
 
-        deprecate_attribute(:first_name,
-                            message: "Please stop using this attribute!")
+        deprecate_attribute(:first_name, message: "Please stop using this attribute!")
       end
     end
 
     it 'applies deprecation warning when setting deprecated attribute' do
-      expect(ActiveSupport::Deprecation).to receive(:warn).once
+      expect(Uncruft.deprecator).to receive(:warn).once
         .with("Please stop using this attribute!")
 
       expect(subject.first_name = my_name).to eq my_name
@@ -29,7 +28,7 @@ RSpec.describe Uncruft::Deprecatable do
     it 'applies deprecation warning when getting deprecated attribute' do
       subject.instance_variable_set(:@first_name, my_name)
 
-      expect(ActiveSupport::Deprecation).to receive(:warn)
+      expect(Uncruft.deprecator).to receive(:warn)
         .with("Please stop using this attribute!")
 
       expect(subject.first_name).to eq my_name
@@ -45,13 +44,12 @@ RSpec.describe Uncruft::Deprecatable do
           "Hello Old World!"
         end
 
-        deprecate_method(:legacy_method,
-                         message: "Please stop using this method!")
+        deprecate_method(:legacy_method, message: "Please stop using this method!")
       end
     end
 
     it 'applies deprecation warning when calling the deprecated method' do
-      expect(ActiveSupport::Deprecation).to receive(:warn)
+      expect(Uncruft.deprecator).to receive(:warn)
         .with("Please stop using this method!")
 
       expect(subject.legacy_method).to eq "Hello Old World!"
