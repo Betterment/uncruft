@@ -9,5 +9,6 @@ inherit_mode:
 AllCops:
   NewCops: enable
   TargetRubyVersion: 3.0
+  TargetRailsVersion: 6.1
   Exclude:
     - gemfiles/*.gemfile
