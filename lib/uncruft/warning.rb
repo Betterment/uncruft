@@ -4,12 +4,14 @@ module Uncruft
   module Warning
     DEPRECATION_PATTERN = /(deprecation|deprecated)/i
 
-    def warn(str, *args, **kwargs)
+    def warn(*args, **kwargs)
+      str = args[0]
+
       if str =~ DEPRECATION_PATTERN # rubocop:disable Performance/RegexpMatch
         message = strip_caller_info(str, caller_locations(1..1).first).strip
         Uncruft.deprecator.warn(message)
       elsif RUBY_VERSION < '2.7' && kwargs.empty?
-        super(str, *args)
+        super(*args)
       else
         super
       end
