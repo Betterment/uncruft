@@ -4,7 +4,6 @@ require 'active_support'
 require 'active_support/time'
 
 require 'uncruft/version'
-require 'uncruft/deprecator'
 require 'uncruft/railtie'
 require 'uncruft/deprecation_handler'
 require 'uncruft/deprecatable'
@@ -21,6 +20,10 @@ module Uncruft
 
     def ignorefile_path
       ENV['UNCRUFT_IGNOREFILE_PATH'] || Rails.root.join('config/deprecations.ignore')
+    end
+
+    def deprecator
+      @deprecator ||= ActiveSupport::Deprecation.new(Uncruft::VERSION, "Uncruft")
     end
   end
 end
