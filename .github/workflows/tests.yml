@@ -12,22 +12,29 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: ['3.0', '3.1', '3.2']
+        ruby: ["3.0", "3.1", "3.2"]
         gemfile:
           - gemfiles/rails_6_1.gemfile
           - gemfiles/rails_7_0.gemfile
           - gemfiles/rails_7_1.gemfile
           - gemfiles/rails_7_2.gemfile
           - gemfiles/rails_8_0.gemfile
+        exclude:
+          - ruby: "3.1"
+            gemfile: gemfiles/rails_8_0.gemfile
+          - ruby: "3.0"
+            gemfile: gemfiles/rails_8_0.gemfile
+          - ruby: "3.0"
+            gemfile: gemfiles/rails_7_2.gemfile
     steps:
-    - uses: actions/checkout@v3
-    - uses: ruby/setup-ruby@v1
-      env:
-        BUNDLE_GEMFILE: ${{ matrix.gemfile }}
-      with:
-        ruby-version: ${{ matrix.ruby }}
-        bundler-cache: true
-    - name: Run linter and tests
-      env:
-        BUNDLE_GEMFILE: ${{ matrix.gemfile }}
-      run: bundle exec rake
+      - uses: actions/checkout@v3
+      - uses: ruby/setup-ruby@v1
+        env:
+          BUNDLE_GEMFILE: ${{ matrix.gemfile }}
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
+      - name: Run linter and tests
+        env:
+          BUNDLE_GEMFILE: ${{ matrix.gemfile }}
+        run: bundle exec rake
