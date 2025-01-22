@@ -9,13 +9,17 @@ describe Uncruft::Warning do
 
   it "doesn't block generic warnings" do
     expect(Uncruft.deprecator).not_to receive(:warn)
+    warn
     warn('oh no, you should worry')
+    Kernel.warn
     Kernel.warn('oh no, you should worry')
     Warning.warn('oh no, you should worry')
   end
 
   it "accepts kwargs from Kernel.warn" do # rubocop:disable RSpec/NoExpectationExample
+    warn(uplevel: 1)
     warn('oh no, you should worry', uplevel: 1)
+    Kernel.warn(uplevel: 1)
     Kernel.warn('oh no, you should worry', uplevel: 1)
   end
 
