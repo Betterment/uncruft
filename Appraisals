@@ -3,6 +3,7 @@
 appraise 'rails-6-1' do
   gem 'railties', '~> 6.1.0'
   gem 'concurrent-ruby', '1.3.4'
+  gem 'nokogiri', '1.16.7'
 end
 
 appraise 'rails-7-0' do
