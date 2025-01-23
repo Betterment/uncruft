@@ -7,6 +7,7 @@ gem "betterlint"
 gem "rails"
 gem "rspec"
 gem "timecop", "~> 0.9.1"
+gem "zeitwerk", "< 2.7"
 gem "railties", "~> 7.2.0"
 
 gemspec path: "../"

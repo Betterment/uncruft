@@ -257,7 +257,7 @@ GEM
       base64
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
-    zeitwerk (2.7.1)
+    zeitwerk (2.6.18)
 
 PLATFORMS
   arm64-darwin-23
@@ -271,6 +271,7 @@ DEPENDENCIES
   rspec
   timecop (~> 0.9.1)
   uncruft!
+  zeitwerk (< 2.7)
 
 BUNDLED WITH
    2.4.22
