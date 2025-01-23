@@ -11,7 +11,7 @@ describe Uncruft::Railtie do
       .from(nil).to(a_collection_containing_exactly(an_instance_of(Uncruft::DeprecationHandler)))
   end
 
-  if Rails.gem_version > Gem::Version.new('7.1')
+  if Rails.gem_version >= Gem::Version.new('7.1')
     before do
       allow(Uncruft).to receive(:record_deprecations?).and_return(true)
     end
