@@ -251,7 +251,7 @@ GEM
     rubocop-rspec_rails (2.29.1)
       rubocop (~> 1.61)
     ruby-progressbar (1.13.0)
-    securerandom (0.4.1)
+    securerandom (0.3.2)
     stringio (3.1.2)
     thor (1.3.2)
     timecop (0.9.10)
@@ -279,6 +279,7 @@ DEPENDENCIES
   rails
   railties (~> 7.1.0)
   rspec
+  securerandom (~> 0.3.0)
   timecop (~> 0.9.1)
   uncruft!
   zeitwerk (< 2.7)

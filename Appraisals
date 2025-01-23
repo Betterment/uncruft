@@ -18,6 +18,7 @@ appraise 'rails-7-1' do
   gem 'railties', '~> 7.1.0'
   gem 'nokogiri', '1.16.7'
   gem 'net-imap', '0.4.18'
+  gem 'securerandom', '~> 0.3.0'
 end
 
 appraise 'rails-7-2' do
