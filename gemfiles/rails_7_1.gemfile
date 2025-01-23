@@ -9,5 +9,7 @@ gem "rspec"
 gem "timecop", "~> 0.9.1"
 gem "zeitwerk", "< 2.7"
 gem "railties", "~> 7.1.0"
+gem "nokogiri", "1.16.7"
+gem "net-imap", "0.4.18"
 
 gemspec path: "../"
