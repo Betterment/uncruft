@@ -118,6 +118,7 @@ RSpec.describe Uncruft::DeprecationHandler do
         allow(ENV).to receive(:fetch).and_call_original
         allow(ENV).to receive(:fetch).with('GEM_HOME', nil).and_return('/banana/banana/banana')
         allow(Gem).to receive(:user_dir).and_return('/apple/apple/apple')
+        allow(Bundler).to receive(:home).and_return('/cherry/cherry/cherry')
       end
 
       it 'sanitizes the message and raises an error' do
@@ -126,6 +127,14 @@ RSpec.describe Uncruft::DeprecationHandler do
 
       context 'when gem home is nested' do
         let(:absolute_path) { Pathname.new('/banana/banana/banana/arbitrary/gem/path/gems/chicken/nuggets.rb') }
+
+        it 'sanitizes the message and raises an error' do
+          expect { subject.call(message, '') }.to raise_error(RuntimeError, expected_error_message)
+        end
+      end
+
+      context 'when gem is installed in the Bundler.home path' do
+        let(:absolute_path) { Pathname.new('/cherry/cherry/cherry/ohno/gems/chicken/nuggets.rb') }
 
         it 'sanitizes the message and raises an error' do
           expect { subject.call(message, '') }.to raise_error(RuntimeError, expected_error_message)

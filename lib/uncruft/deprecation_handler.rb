@@ -44,6 +44,10 @@ module Uncruft
         message.gsub!(gem_home, '$GEM_PATH')
       end
 
+      if (bundler_home = bundler_home(message)).present?
+        message.gsub!(bundler_home, '$GEM_PATH')
+      end
+
       if (user_install = user_install(message)).present?
         message.gsub!(user_install, '$GEM_PATH')
       end
@@ -75,6 +79,10 @@ module Uncruft
 
     def gem_home(message)
       message.match(%r{(?i:c)alled from( .+ at)? (#{ENV.fetch('GEM_HOME', nil)}/(.+/)*gems)})&.[](2).presence
+    end
+
+    def bundler_home(message)
+      message.match(%r{(?i:c)alled from( .+ at)? (#{Bundler.home}/(.+/)*gems)})&.[](2).presence
     end
 
     def user_install(message)
