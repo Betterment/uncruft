@@ -40,16 +40,8 @@ module Uncruft
     end
 
     def normalize_callstack_path(message)
-      if (gem_home = gem_home(message)).present?
-        message.gsub!(gem_home, '$GEM_PATH')
-      end
-
-      if (bundler_home = bundler_home(message)).present?
-        message.gsub!(bundler_home, '$GEM_PATH')
-      end
-
-      if (user_install = user_install(message)).present?
-        message.gsub!(user_install, '$GEM_PATH')
+      if (gem_path = gem_path(message)).present?
+        message.gsub!(gem_path, '$GEM_PATH')
       end
 
       if message.include?(bin_dir)
@@ -77,16 +69,9 @@ module Uncruft
       message.sub(/(called from( .+ at)? .+):\d+/, '\1')
     end
 
-    def gem_home(message)
-      message.match(%r{(?i:c)alled from( .+ at)? (#{ENV.fetch('GEM_HOME', nil)}/(.+/)*gems)})&.[](2).presence
-    end
-
-    def bundler_home(message)
-      message.match(%r{(?i:c)alled from( .+ at)? (#{Bundler.home}/(.+/)*gems)})&.[](2).presence
-    end
-
-    def user_install(message)
-      message.match(%r{(?i:c)alled from( .+ at)? (#{Gem.user_dir}/(.+/)*gems)})&.[](2).presence
+    def gem_path(message)
+      paths = [ENV.fetch('GEM_HOME', nil), Bundler.home.to_s, Gem.user_dir].compact
+      message.match(%r{(?i:c)alled from( .+ at)? (#{Regexp.union(paths)}/(.+/)*gems)})&.[](2).presence
     end
 
     def absolute_path(message)
