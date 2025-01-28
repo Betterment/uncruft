@@ -30,7 +30,7 @@ module Uncruft
     end
 
     def line_number(message)
-      message.match(/called from( .+ at)? .+:(\d+)/)&.[](2)
+      message[/called from( .+ at)? .+:(\d+)/, 2]
     end
 
     # Rails deprecation message formats found here:
@@ -71,11 +71,11 @@ module Uncruft
 
     def gem_path(message)
       paths = [ENV.fetch('GEM_HOME', nil), Bundler.home.to_s, Gem.user_dir].compact
-      message.match(%r{(?i:c)alled from( .+ at)? (#{Regexp.union(paths)}/(.+/)*gems)})&.[](2).presence
+      message[%r{(?i:c)alled from( .+ at)? (#{Regexp.union(paths)}/(.+/)*gems)}, 2].presence
     end
 
     def absolute_path(message)
-      message.match(/called from( .+ at)? (.+):\d/)&.[](2)
+      message[/called from( .+ at)? (.+):\d/, 2]
     end
 
     def relative_path(absolute_path)
