@@ -30,7 +30,7 @@ module Uncruft
     end
 
     def line_number(message)
-      message.match(/called from( .+ at)? .+:(\d+)/)&.[](2)
+      message[/called from( .+ at)? .+:(\d+)/, 2]
     end
 
     # Rails deprecation message formats found here:
@@ -40,12 +40,8 @@ module Uncruft
     end
 
     def normalize_callstack_path(message)
-      if (gem_home = gem_home(message)).present?
-        message.gsub!(gem_home, '$GEM_PATH')
-      end
-
-      if (user_install = user_install(message)).present?
-        message.gsub!(user_install, '$GEM_PATH')
+      if (gem_path = gem_path(message)).present?
+        message.gsub!(gem_path, '$GEM_PATH')
       end
 
       if message.include?(bin_dir)
@@ -73,16 +69,13 @@ module Uncruft
       message.sub(/(called from( .+ at)? .+):\d+/, '\1')
     end
 
-    def gem_home(message)
-      message.match(%r{(?i:c)alled from( .+ at)? (#{ENV.fetch('GEM_HOME', nil)}/(.+/)*gems)})&.[](2).presence
-    end
-
-    def user_install(message)
-      message.match(%r{(?i:c)alled from( .+ at)? (#{Gem.user_dir}/(.+/)*gems)})&.[](2).presence
+    def gem_path(message)
+      paths = [ENV.fetch('GEM_HOME', nil), Bundler.home.to_s, Gem.user_dir].compact
+      message[%r{(?i:c)alled from( .+ at)? (#{Regexp.union(paths)}/(.+/)*gems)}, 2].presence
     end
 
     def absolute_path(message)
-      message.match(/called from( .+ at)? (.+):\d/)&.[](2)
+      message[/called from( .+ at)? (.+):\d/, 2]
     end
 
     def relative_path(absolute_path)
