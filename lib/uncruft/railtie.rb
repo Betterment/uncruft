@@ -11,12 +11,16 @@ module Uncruft
         strategies.unshift(DeprecationHandler.new)
         config.active_support.deprecation = strategies
       end
+    end
 
-      if Rails.gem_version >= Gem::Version.new('7.1')
-        initializer "uncruft.deprecator" do |app|
-          app.deprecators[:uncruft] = Uncruft.deprecator
-        end
+    if Rails.gem_version >= Gem::Version.new('7.1')
+      initializer "uncruft.deprecator" do |app|
+        app.deprecators[:uncruft] = Uncruft.deprecator
       end
+    end
+
+    initializer 'uncruft.deprecator.behavior' do |app|
+      Uncruft.deprecator.behavior = app.config.active_support.deprecation
     end
   end
 end
