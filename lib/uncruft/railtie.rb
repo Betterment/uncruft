@@ -18,5 +18,9 @@ module Uncruft
         app.deprecators[:uncruft] = Uncruft.deprecator
       end
     end
+
+    initializer 'uncruft.deprecator.behavior' do |app|
+      Uncruft.deprecator.behavior = app.config.active_support.deprecation
+    end
   end
 end
