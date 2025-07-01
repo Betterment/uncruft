@@ -27,8 +27,8 @@ jobs:
           - ruby: "3.0"
             gemfile: gemfiles/rails_7_2.gemfile
     steps:
-      - uses: actions/checkout@v3
-      - uses: ruby/setup-ruby@v1
+      - uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3
+      - uses: ruby/setup-ruby@a4effe49ee8ee5b8b5091268c473a4628afb5651 # v1
         env:
           BUNDLE_GEMFILE: ${{ matrix.gemfile }}
         with:
