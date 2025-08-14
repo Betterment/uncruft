@@ -80,12 +80,11 @@ RSpec.describe Uncruft::Deprecatable do
         keyword_arg = "a keyword arg"
 
         expect(subject.legacy_method(argument, keyword_argument: keyword_arg) { "returned from a block" })
-          .to eq(<<~RESULT,
+          .to eq(<<~RESULT)
             This is the argument: a positional argument
             This is the keyword_argument: a keyword arg
             And here is the block: returned from a block
           RESULT
-                )
       end
     end
   end
