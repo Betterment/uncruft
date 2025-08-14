@@ -14,9 +14,9 @@ module Uncruft
         prepended_method = Module.new
 
         prepended_method.module_eval do
-          define_method method do |*args, &block|
+          define_method method do |*args, **kwargs, &block|
             Uncruft.deprecator.warn(message)
-            super(*args, &block)
+            super(*args, **kwargs, &block)
           end
         end
 

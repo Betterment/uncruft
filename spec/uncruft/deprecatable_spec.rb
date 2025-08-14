@@ -54,5 +54,39 @@ RSpec.describe Uncruft::Deprecatable do
 
       expect(subject.legacy_method).to eq "Hello Old World!"
     end
+
+    context 'when the legacy method accepts arguments' do
+      let(:klass) do
+        Class.new do
+          include Uncruft::Deprecatable
+
+          def legacy_method(argument, keyword_argument:)
+            <<~RESULT
+              This is the argument: #{argument}
+              This is the keyword_argument: #{keyword_argument}
+              And here is the block: #{yield}
+            RESULT
+          end
+
+          deprecate_method(:legacy_method, message: "Please stop using this method!")
+        end
+      end
+
+      it 'forwards positional, keyword, and block arguments to the deprecated method' do
+        expect(Uncruft.deprecator).to receive(:warn)
+          .with("Please stop using this method!")
+
+        argument = "a positional argument"
+        keyword_arg = "a keyword arg"
+
+        expect(subject.legacy_method(argument, keyword_argument: keyword_arg) { "returned from a block" })
+          .to eq(<<~RESULT,
+            This is the argument: a positional argument
+            This is the keyword_argument: a keyword arg
+            And here is the block: returned from a block
+          RESULT
+                )
+      end
+    end
   end
 end
