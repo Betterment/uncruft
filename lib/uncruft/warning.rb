@@ -24,7 +24,7 @@ module Uncruft
   end
 end
 
-if Rails.env.development? || Rails.env.test?
+if Rails.env.local?
   if defined?(Warning)
     Warning.prepend(Uncruft::Warning)
     Warning.singleton_class.prepend(Uncruft::Warning)

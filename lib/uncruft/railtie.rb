@@ -4,7 +4,7 @@ require 'rails'
 
 module Uncruft
   class Railtie < ::Rails::Railtie
-    if Rails.env.test? || Rails.env.development?
+    if Rails.env.local?
       initializer 'uncruft.deprecation_handler', before: 'active_support.deprecation_behavior' do
         strategies = [config.active_support.deprecation].flatten(1).compact
         strategies.reject! { |s| s == :stderr }
@@ -13,10 +13,8 @@ module Uncruft
       end
     end
 
-    if Rails.gem_version >= Gem::Version.new('7.1')
-      initializer "uncruft.deprecator" do |app|
-        app.deprecators[:uncruft] = Uncruft.deprecator
-      end
+    initializer "uncruft.deprecator" do |app|
+      app.deprecators[:uncruft] = Uncruft.deprecator
     end
 
     initializer 'uncruft.deprecator.behavior' do |app|

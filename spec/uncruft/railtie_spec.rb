@@ -11,16 +11,12 @@ describe Uncruft::Railtie do
       .from(nil).to(a_collection_containing_exactly(an_instance_of(Uncruft::DeprecationHandler)))
   end
 
-  if Rails.gem_version >= Gem::Version.new('7.1')
-    before do
-      allow(Uncruft).to receive(:record_deprecations?).and_return(true)
-    end
+  it 'includes deprecator into Rails.application.deprecators' do
+    allow(Uncruft).to receive(:record_deprecations?).and_return(true)
 
-    it 'includes deprecator into Rails.application.deprecators' do
-      app.initialize!
+    app.initialize!
 
-      expect(app.deprecators[:uncruft]).to eq Uncruft.deprecator
-    end
+    expect(app.deprecators[:uncruft]).to eq Uncruft.deprecator
   end
 
   context 'when the configured behavior is :stderr' do

@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
 
   s.files = Dir['{lib}/**/*', 'LICENSE', 'Rakefile', 'README.md']
 
-  s.required_ruby_version = '>= 3.0'
+  s.required_ruby_version = '>= 3.2'
 
-  s.add_dependency 'railties', '>= 6.1.0'
+  s.add_dependency 'railties', '>= 7.2'
 end
