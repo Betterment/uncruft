@@ -42,6 +42,7 @@ module Uncruft
     def normalize_callstack_path(message)
       if (gem_path = gem_path(message)).present?
         message.gsub!(gem_path, '$GEM_PATH')
+        remove_gem_version_number(message)
       end
 
       if message.include?(bin_dir)
@@ -50,7 +51,12 @@ module Uncruft
 
       if (absolute_path = absolute_path(message)).present?
         message.gsub!(absolute_path, relative_path(absolute_path))
+        remove_gem_version_number(message)
       end
+    end
+
+    def remove_gem_version_number(message)
+      message.sub(%r{(\$GEM_PATH/[^/]+)-[^/]+(/.*)}, '\1-$VERSION\2')
     end
 
     def normalize_caller(message)

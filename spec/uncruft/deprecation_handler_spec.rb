@@ -111,8 +111,8 @@ RSpec.describe Uncruft::DeprecationHandler do
     end
 
     context 'when message includes custom gem path' do
-      let(:absolute_path) { Pathname.new('/banana/banana/banana/gems/chicken/nuggets.rb') }
-      let(:expected_ignorefile_entry) { "Warning: BAD called from <something> at $GEM_PATH/chicken/nuggets.rb" }
+      let(:absolute_path) { Pathname.new('/banana/banana/banana/gems/chicken-3.4.5/nuggets.rb') }
+      let(:expected_ignorefile_entry) { "Warning: BAD called from <something> at $GEM_PATH/chicken-$VERSION/nuggets.rb" }
 
       before do
         allow(ENV).to receive(:fetch).and_call_original
@@ -125,8 +125,17 @@ RSpec.describe Uncruft::DeprecationHandler do
         expect { subject.call(message, '') }.to raise_error(RuntimeError, expected_error_message)
       end
 
+
+      context 'when gem path has a git sha instead of a version' do
+        let(:absolute_path) { Pathname.new('/banana/banana/banana/gems/chicken-a1b2c3d4/nuggets.rb') }
+
+        it 'sanitizes the message and raises an error' do
+          expect { subject.call(message, '') }.to raise_error(RuntimeError, expected_error_message)
+        end
+      end
+
       context 'when gem home is nested' do
-        let(:absolute_path) { Pathname.new('/banana/banana/banana/arbitrary/gem/path/gems/chicken/nuggets.rb') }
+        let(:absolute_path) { Pathname.new('/banana/banana/banana/arbitrary/gem/path/gems/chicken-3.4.5/nuggets.rb') }
 
         it 'sanitizes the message and raises an error' do
           expect { subject.call(message, '') }.to raise_error(RuntimeError, expected_error_message)
@@ -134,7 +143,7 @@ RSpec.describe Uncruft::DeprecationHandler do
       end
 
       context 'when gem is installed in the Bundler.home path' do
-        let(:absolute_path) { Pathname.new('/cherry/cherry/cherry/ohno/gems/chicken/nuggets.rb') }
+        let(:absolute_path) { Pathname.new('/cherry/cherry/cherry/ohno/gems/chicken-3.4.5/nuggets.rb') }
 
         it 'sanitizes the message and raises an error' do
           expect { subject.call(message, '') }.to raise_error(RuntimeError, expected_error_message)
@@ -142,7 +151,7 @@ RSpec.describe Uncruft::DeprecationHandler do
       end
 
       context 'when gem is installed in the --user-install path' do
-        let(:absolute_path) { Pathname.new('/apple/apple/apple/ohno/gems/chicken/nuggets.rb') }
+        let(:absolute_path) { Pathname.new('/apple/apple/apple/ohno/gems/chicken-3.4.5/nuggets.rb') }
 
         it 'sanitizes the message and raises an error' do
           expect { subject.call(message, '') }.to raise_error(RuntimeError, expected_error_message)
@@ -150,14 +159,14 @@ RSpec.describe Uncruft::DeprecationHandler do
       end
 
       context 'when gem is vendored' do
-        let(:absolute_path) { Rails.root.join('vendor/cache/chicken/nuggets.rb') }
+        let(:absolute_path) { Rails.root.join('vendor/cache/chicken-3.4.5/nuggets.rb') }
 
         it 'sanitizes the message and raises an error' do
           expect { subject.call(message, '') }.to raise_error(RuntimeError, expected_error_message)
         end
 
         context 'when gem is vendored elsewhere' do
-          let(:absolute_path) { Rails.root.join('../../vendor/cache/chicken/nuggets.rb') }
+          let(:absolute_path) { Rails.root.join('../../vendor/cache/chicken-3.4.5/nuggets.rb') }
 
           it 'sanitizes the message and raises an error' do
             expect { subject.call(message, '') }.to raise_error(RuntimeError, expected_error_message)
