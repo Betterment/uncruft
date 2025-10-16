@@ -125,7 +125,6 @@ RSpec.describe Uncruft::DeprecationHandler do
         expect { subject.call(message, '') }.to raise_error(RuntimeError, expected_error_message)
       end
 
-
       context 'when gem path has a git sha instead of a version' do
         let(:absolute_path) { Pathname.new('/banana/banana/banana/gems/chicken-a1b2c3d4/nuggets.rb') }
 
