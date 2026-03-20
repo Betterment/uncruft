@@ -14,6 +14,15 @@ RSpec.describe Uncruft::Deprecatable do
     Uncruft.deprecator.behavior = original_behavior
   end
 
+  def capture_callstack(&block)
+    callstacks = []
+    Uncruft.deprecator.behavior = ->(_message, callstack, *) {
+      callstacks << callstack
+    }
+    block.call
+    callstacks
+  end
+
   describe '.deprecate_attribute' do
     let(:klass) do
       Class.new do
@@ -25,38 +34,24 @@ RSpec.describe Uncruft::Deprecatable do
       end
     end
 
-    it 'reports the caller location, not deprecatable.rb, when setting' do
-      callstacks = []
-      Uncruft.deprecator.behavior = ->(_message, callstack, _deprecation_horizon, _gem_name) {
-        callstacks << callstack
-      }
-
-      subject.first_name = my_name
+    it 'does not include deprecatable.rb in the callstack when setting' do
+      callstacks = capture_callstack { subject.first_name = my_name }
 
       expect(callstacks.length).to eq(1)
-      caller_file = callstacks.first.first.path
-      expect(caller_file).not_to include("deprecatable.rb"), <<~MSG
-        Expected the callstack to point to the caller, not deprecatable.rb.
-        Got: #{callstacks.first.first}
-      MSG
+      paths = callstacks.first.map(&:path)
+      expect(paths).not_to include(a_string_including("deprecatable.rb")),
+        "Expected no frame to reference deprecatable.rb, but got:\n#{callstacks.first.map.with_index { |cl, i| "  FRAME #{i}: #{cl}" }.join("\n")}"
     end
 
-    it 'reports the caller location, not deprecatable.rb, when getting' do
+    it 'does not include deprecatable.rb in the callstack when getting' do
       subject.instance_variable_set(:@first_name, my_name)
 
-      callstacks = []
-      Uncruft.deprecator.behavior = ->(_message, callstack, _deprecation_horizon, _gem_name) {
-        callstacks << callstack
-      }
-
-      subject.first_name
+      callstacks = capture_callstack { subject.first_name }
 
       expect(callstacks.length).to eq(1)
-      caller_file = callstacks.first.first.path
-      expect(caller_file).not_to include("deprecatable.rb"), <<~MSG
-        Expected the callstack to point to the caller, not deprecatable.rb.
-        Got: #{callstacks.first.first}
-      MSG
+      paths = callstacks.first.map(&:path)
+      expect(paths).not_to include(a_string_including("deprecatable.rb")),
+        "Expected no frame to reference deprecatable.rb, but got:\n#{callstacks.first.map.with_index { |cl, i| "  FRAME #{i}: #{cl}" }.join("\n")}"
     end
   end
 
@@ -73,21 +68,13 @@ RSpec.describe Uncruft::Deprecatable do
       end
     end
 
-    it 'reports the caller location, not deprecatable.rb' do
-      callstacks = []
-      Uncruft.deprecator.behavior = ->(_message, callstack, _deprecation_horizon, _gem_name) {
-        callstacks << callstack
-      }
+    it 'does not include deprecatable.rb in the callstack' do
+      callstacks = capture_callstack { subject.legacy_method }
 
-      result = subject.legacy_method
-
-      expect(result).to eq("Hello Old World!")
       expect(callstacks.length).to eq(1)
-      caller_file = callstacks.first.first.path
-      expect(caller_file).not_to include("deprecatable.rb"), <<~MSG
-        Expected the callstack to point to the caller, not deprecatable.rb.
-        Got: #{callstacks.first.first}
-      MSG
+      paths = callstacks.first.map(&:path)
+      expect(paths).not_to include(a_string_including("deprecatable.rb")),
+        "Expected no frame to reference deprecatable.rb, but got:\n#{callstacks.first.map.with_index { |cl, i| "  FRAME #{i}: #{cl}" }.join("\n")}"
     end
 
     context 'when the legacy method accepts arguments' do
@@ -108,27 +95,20 @@ RSpec.describe Uncruft::Deprecatable do
       end
 
       it 'forwards positional, keyword, and block arguments to the deprecated method' do
-        callstacks = []
-        Uncruft.deprecator.behavior = ->(_message, callstack, _deprecation_horizon, _gem_name) {
-          callstacks << callstack
-        }
+        callstacks = capture_callstack do
+          result = subject.legacy_method("a positional argument", keyword_argument: "a keyword arg") { "returned from a block" }
 
-        argument = "a positional argument"
-        keyword_arg = "a keyword arg"
+          expect(result).to eq(<<~RESULT)
+            This is the argument: a positional argument
+            This is the keyword_argument: a keyword arg
+            And here is the block: returned from a block
+          RESULT
+        end
 
-        result = subject.legacy_method(argument, keyword_argument: keyword_arg) { "returned from a block" }
-
-        expect(result).to eq(<<~RESULT)
-          This is the argument: a positional argument
-          This is the keyword_argument: a keyword arg
-          And here is the block: returned from a block
-        RESULT
         expect(callstacks.length).to eq(1)
-        caller_file = callstacks.first.first.path
-        expect(caller_file).not_to include("deprecatable.rb"), <<~MSG
-          Expected the callstack to point to the caller, not deprecatable.rb.
-          Got: #{callstacks.first.first}
-        MSG
+        paths = callstacks.first.map(&:path)
+        expect(paths).not_to include(a_string_including("deprecatable.rb")),
+          "Expected no frame to reference deprecatable.rb, but got:\n#{callstacks.first.map.with_index { |cl, i| "  FRAME #{i}: #{cl}" }.join("\n")}"
       end
     end
   end
