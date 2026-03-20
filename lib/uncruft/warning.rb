@@ -8,7 +8,6 @@ module Uncruft
       str = args[0]
 
       if str =~ DEPRECATION_PATTERN # rubocop:disable Performance/RegexpMatch
-        $stderr.puts caller_locations(0, 10).map.with_index { |cl, i| "WARNING FRAME #{i}: #{cl}" }.join("\n") # rubocop:disable Style/StderrPuts
         cloc = find_caller_location(str, caller_locations(1..5))
         message = strip_caller_info(str, cloc).strip
         Uncruft.deprecator.warn(message)
