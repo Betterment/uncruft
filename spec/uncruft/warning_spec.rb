@@ -47,6 +47,22 @@ describe Uncruft::Warning do
         allow(Uncruft.deprecator).to receive(:warn).with('Deprecation detected: banana --').and_return('we do our best...')
         expect(Warning.warn("Deprecation detected: banana -- #{caller(0..0).first}")).to eq('we do our best...')
       end
+
+      it 'finds the correct caller frame and strips its path from the message' do
+        received_messages = []
+        allow(Uncruft.deprecator).to receive(:warn) { |msg| received_messages << msg }
+
+        path = caller_locations(0..0).first.path
+        lineno = __LINE__ + 1
+        warn("DEPRECATION WARNING: foo is deprecated! #{path}:#{lineno}")
+
+        expect(received_messages.length).to eq(1)
+        expect(received_messages.first).not_to include(path),
+          "Expected caller path to be stripped, but got: #{received_messages.first}"
+        expect(received_messages.first).not_to include("warning.rb"),
+          "Expected warning.rb to not appear, but got: #{received_messages.first}"
+        expect(received_messages.first).to include("foo is deprecated!")
+      end
     end
   end
 end
