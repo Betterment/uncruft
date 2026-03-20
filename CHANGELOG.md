@@ -15,8 +15,11 @@ and this project aims to adhere to [Semantic Versioning](http://semver.org/spec/
 ### Added
 - Official support for Ruby 3.4
 ### Fixed
-- Fixed `caller_locations` frame depth change on Ruby 3.4 that caused incorrect caller
-  info resolution in `Uncruft::Warning#warn`
+- Fixed `caller_locations` frame depth change on Ruby 3.4 + Rails 8.0 that caused
+  incorrect caller info resolution in `Uncruft::Warning#warn`
+- Fixed `Uncruft::Deprecatable` reporting `deprecatable.rb` as the caller instead of the
+  actual call site when installed via non-rubygems methods (vendored path, GitHub/git
+  source, local path, or custom `BUNDLE_PATH`)
 
 ## [0.8.0] - 2025-09-05
 ### Removed <!-- for now removed features. -->
