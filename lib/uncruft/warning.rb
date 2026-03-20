@@ -8,7 +8,8 @@ module Uncruft
       str = args[0]
 
       if str =~ DEPRECATION_PATTERN # rubocop:disable Performance/RegexpMatch
-        message = strip_caller_info(str, caller_locations(1..1).first).strip
+        cloc = find_caller_location(str, caller_locations(1..5))
+        message = strip_caller_info(str, cloc).strip
         Uncruft.deprecator.warn(message)
       else
         super
