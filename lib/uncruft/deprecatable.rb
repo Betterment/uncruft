@@ -15,7 +15,7 @@ module Uncruft
 
         prepended_method.module_eval do
           define_method method do |*args, **kwargs, &block|
-            Uncruft.deprecator.warn(message)
+            Uncruft.deprecator.warn(message, caller_locations(1))
             super(*args, **kwargs, &block)
           end
         end
