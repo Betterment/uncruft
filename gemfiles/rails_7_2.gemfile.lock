@@ -1,7 +1,7 @@
 PATH
   remote: ..
   specs:
-    uncruft (1.0.0)
+    uncruft (1.0.1)
       railties (>= 7.2)
 
 GEM
@@ -261,6 +261,7 @@ GEM
 
 PLATFORMS
   arm64-darwin-23
+  arm64-darwin-25
   x86_64-linux
 
 DEPENDENCIES

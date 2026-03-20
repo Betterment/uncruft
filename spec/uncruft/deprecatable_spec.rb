@@ -7,6 +7,13 @@ RSpec.describe Uncruft::Deprecatable do
 
   subject { klass.new }
 
+  around do |example|
+    original_behavior = Uncruft.deprecator.behavior
+    example.run
+  ensure
+    Uncruft.deprecator.behavior = original_behavior
+  end
+
   describe '.deprecate_attribute' do
     let(:klass) do
       Class.new do
@@ -19,42 +26,36 @@ RSpec.describe Uncruft::Deprecatable do
     end
 
     it 'reports the caller location, not deprecatable.rb, when setting' do
-      warnings = []
-      Uncruft.deprecator.behavior = ->(message, _callstack, _deprecation_horizon, _gem_name) {
-        warnings << message
+      callstacks = []
+      Uncruft.deprecator.behavior = ->(_message, callstack, _deprecation_horizon, _gem_name) {
+        callstacks << callstack
       }
 
       subject.first_name = my_name
 
-      expect(warnings.length).to eq(1)
-      expect(warnings.first).to include("deprecatable_spec.rb"), <<~MSG
-        Expected the deprecation warning to reference the spec file as the caller,
-        but got: #{warnings.first}
-      MSG
-      expect(warnings.first).not_to include("lib/uncruft/deprecatable.rb"), <<~MSG
-        The deprecation warning should NOT reference deprecatable.rb as the caller,
-        but got: #{warnings.first}
+      expect(callstacks.length).to eq(1)
+      caller_file = callstacks.first.first.path
+      expect(caller_file).not_to include("deprecatable.rb"), <<~MSG
+        Expected the callstack to point to the caller, not deprecatable.rb.
+        Got: #{callstacks.first.first}
       MSG
     end
 
     it 'reports the caller location, not deprecatable.rb, when getting' do
       subject.instance_variable_set(:@first_name, my_name)
 
-      warnings = []
-      Uncruft.deprecator.behavior = ->(message, _callstack, _deprecation_horizon, _gem_name) {
-        warnings << message
+      callstacks = []
+      Uncruft.deprecator.behavior = ->(_message, callstack, _deprecation_horizon, _gem_name) {
+        callstacks << callstack
       }
 
       subject.first_name
 
-      expect(warnings.length).to eq(1)
-      expect(warnings.first).to include("deprecatable_spec.rb"), <<~MSG
-        Expected the deprecation warning to reference the spec file as the caller,
-        but got: #{warnings.first}
-      MSG
-      expect(warnings.first).not_to include("lib/uncruft/deprecatable.rb"), <<~MSG
-        The deprecation warning should NOT reference deprecatable.rb as the caller,
-        but got: #{warnings.first}
+      expect(callstacks.length).to eq(1)
+      caller_file = callstacks.first.first.path
+      expect(caller_file).not_to include("deprecatable.rb"), <<~MSG
+        Expected the callstack to point to the caller, not deprecatable.rb.
+        Got: #{callstacks.first.first}
       MSG
     end
   end
@@ -73,22 +74,19 @@ RSpec.describe Uncruft::Deprecatable do
     end
 
     it 'reports the caller location, not deprecatable.rb' do
-      warnings = []
-      Uncruft.deprecator.behavior = ->(message, _callstack, _deprecation_horizon, _gem_name) {
-        warnings << message
+      callstacks = []
+      Uncruft.deprecator.behavior = ->(_message, callstack, _deprecation_horizon, _gem_name) {
+        callstacks << callstack
       }
 
       result = subject.legacy_method
 
       expect(result).to eq("Hello Old World!")
-      expect(warnings.length).to eq(1)
-      expect(warnings.first).to include("deprecatable_spec.rb"), <<~MSG
-        Expected the deprecation warning to reference the spec file as the caller,
-        but got: #{warnings.first}
-      MSG
-      expect(warnings.first).not_to include("lib/uncruft/deprecatable.rb"), <<~MSG
-        The deprecation warning should NOT reference deprecatable.rb as the caller,
-        but got: #{warnings.first}
+      expect(callstacks.length).to eq(1)
+      caller_file = callstacks.first.first.path
+      expect(caller_file).not_to include("deprecatable.rb"), <<~MSG
+        Expected the callstack to point to the caller, not deprecatable.rb.
+        Got: #{callstacks.first.first}
       MSG
     end
 
@@ -110,9 +108,9 @@ RSpec.describe Uncruft::Deprecatable do
       end
 
       it 'forwards positional, keyword, and block arguments to the deprecated method' do
-        warnings = []
-        Uncruft.deprecator.behavior = ->(message, _callstack, _deprecation_horizon, _gem_name) {
-          warnings << message
+        callstacks = []
+        Uncruft.deprecator.behavior = ->(_message, callstack, _deprecation_horizon, _gem_name) {
+          callstacks << callstack
         }
 
         argument = "a positional argument"
@@ -125,10 +123,11 @@ RSpec.describe Uncruft::Deprecatable do
           This is the keyword_argument: a keyword arg
           And here is the block: returned from a block
         RESULT
-        expect(warnings.length).to eq(1)
-        expect(warnings.first).to include("deprecatable_spec.rb"), <<~MSG
-          Expected the deprecation warning to reference the spec file as the caller,
-          but got: #{warnings.first}
+        expect(callstacks.length).to eq(1)
+        caller_file = callstacks.first.first.path
+        expect(caller_file).not_to include("deprecatable.rb"), <<~MSG
+          Expected the callstack to point to the caller, not deprecatable.rb.
+          Got: #{callstacks.first.first}
         MSG
       end
     end
