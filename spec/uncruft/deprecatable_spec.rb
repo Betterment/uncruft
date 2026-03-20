@@ -7,6 +7,13 @@ RSpec.describe Uncruft::Deprecatable do
 
   subject { klass.new }
 
+  around do |example|
+    original_behavior = Uncruft.deprecator.behavior
+    example.run
+  ensure
+    Uncruft.deprecator.behavior = original_behavior
+  end
+
   describe '.deprecate_attribute' do
     let(:klass) do
       Class.new do
@@ -18,20 +25,38 @@ RSpec.describe Uncruft::Deprecatable do
       end
     end
 
-    it 'applies deprecation warning when setting deprecated attribute' do
-      expect(Uncruft.deprecator).to receive(:warn).once
-        .with("Please stop using this attribute!")
+    it 'reports the caller location, not deprecatable.rb, when setting' do
+      callstacks = []
+      Uncruft.deprecator.behavior = ->(_message, callstack, _deprecation_horizon, _gem_name) {
+        callstacks << callstack
+      }
 
-      expect(subject.first_name = my_name).to eq my_name
+      subject.first_name = my_name
+
+      expect(callstacks.length).to eq(1)
+      caller_file = callstacks.first.first.path
+      expect(caller_file).not_to include("deprecatable.rb"), <<~MSG
+        Expected the callstack to point to the caller, not deprecatable.rb.
+        Got: #{callstacks.first.first}
+      MSG
     end
 
-    it 'applies deprecation warning when getting deprecated attribute' do
+    it 'reports the caller location, not deprecatable.rb, when getting' do
       subject.instance_variable_set(:@first_name, my_name)
 
-      expect(Uncruft.deprecator).to receive(:warn)
-        .with("Please stop using this attribute!")
+      callstacks = []
+      Uncruft.deprecator.behavior = ->(_message, callstack, _deprecation_horizon, _gem_name) {
+        callstacks << callstack
+      }
 
-      expect(subject.first_name).to eq my_name
+      subject.first_name
+
+      expect(callstacks.length).to eq(1)
+      caller_file = callstacks.first.first.path
+      expect(caller_file).not_to include("deprecatable.rb"), <<~MSG
+        Expected the callstack to point to the caller, not deprecatable.rb.
+        Got: #{callstacks.first.first}
+      MSG
     end
   end
 
@@ -48,11 +73,21 @@ RSpec.describe Uncruft::Deprecatable do
       end
     end
 
-    it 'applies deprecation warning when calling the deprecated method' do
-      expect(Uncruft.deprecator).to receive(:warn)
-        .with("Please stop using this method!")
+    it 'reports the caller location, not deprecatable.rb' do
+      callstacks = []
+      Uncruft.deprecator.behavior = ->(_message, callstack, _deprecation_horizon, _gem_name) {
+        callstacks << callstack
+      }
 
-      expect(subject.legacy_method).to eq "Hello Old World!"
+      result = subject.legacy_method
+
+      expect(result).to eq("Hello Old World!")
+      expect(callstacks.length).to eq(1)
+      caller_file = callstacks.first.first.path
+      expect(caller_file).not_to include("deprecatable.rb"), <<~MSG
+        Expected the callstack to point to the caller, not deprecatable.rb.
+        Got: #{callstacks.first.first}
+      MSG
     end
 
     context 'when the legacy method accepts arguments' do
@@ -73,18 +108,27 @@ RSpec.describe Uncruft::Deprecatable do
       end
 
       it 'forwards positional, keyword, and block arguments to the deprecated method' do
-        expect(Uncruft.deprecator).to receive(:warn)
-          .with("Please stop using this method!")
+        callstacks = []
+        Uncruft.deprecator.behavior = ->(_message, callstack, _deprecation_horizon, _gem_name) {
+          callstacks << callstack
+        }
 
         argument = "a positional argument"
         keyword_arg = "a keyword arg"
 
-        expect(subject.legacy_method(argument, keyword_argument: keyword_arg) { "returned from a block" })
-          .to eq(<<~RESULT)
-            This is the argument: a positional argument
-            This is the keyword_argument: a keyword arg
-            And here is the block: returned from a block
-          RESULT
+        result = subject.legacy_method(argument, keyword_argument: keyword_arg) { "returned from a block" }
+
+        expect(result).to eq(<<~RESULT)
+          This is the argument: a positional argument
+          This is the keyword_argument: a keyword arg
+          And here is the block: returned from a block
+        RESULT
+        expect(callstacks.length).to eq(1)
+        caller_file = callstacks.first.first.path
+        expect(caller_file).not_to include("deprecatable.rb"), <<~MSG
+          Expected the callstack to point to the caller, not deprecatable.rb.
+          Got: #{callstacks.first.first}
+        MSG
       end
     end
   end
