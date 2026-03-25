@@ -39,10 +39,10 @@ RSpec.describe Uncruft::Deprecatable do
 
       expect(callstacks.length).to eq(1)
       paths = callstacks.first.map(&:path)
-      expect(paths).not_to include(a_string_including("deprecatable.rb")),
-        "Expected no frame to reference deprecatable.rb, but got:\n#{callstacks.first.map.with_index { |cl, i|
-                                                                       "  FRAME #{i}: #{cl}"
-                                                                     }.join("\n")}"
+      expect(paths).not_to include(a_string_starting_with(Uncruft::GEM_ROOT)),
+        "Expected no frame from the uncruft gem, but got:\n#{callstacks.first.map.with_index { |cl, i|
+                                                               "  FRAME #{i}: #{cl}"
+                                                             }.join("\n")}"
     end
 
     it 'does not include deprecatable.rb in the callstack when getting' do
@@ -52,10 +52,10 @@ RSpec.describe Uncruft::Deprecatable do
 
       expect(callstacks.length).to eq(1)
       paths = callstacks.first.map(&:path)
-      expect(paths).not_to include(a_string_including("deprecatable.rb")),
-        "Expected no frame to reference deprecatable.rb, but got:\n#{callstacks.first.map.with_index { |cl, i|
-                                                                       "  FRAME #{i}: #{cl}"
-                                                                     }.join("\n")}"
+      expect(paths).not_to include(a_string_starting_with(Uncruft::GEM_ROOT)),
+        "Expected no frame from the uncruft gem, but got:\n#{callstacks.first.map.with_index { |cl, i|
+                                                               "  FRAME #{i}: #{cl}"
+                                                             }.join("\n")}"
     end
   end
 
@@ -77,10 +77,10 @@ RSpec.describe Uncruft::Deprecatable do
 
       expect(callstacks.length).to eq(1)
       paths = callstacks.first.map(&:path)
-      expect(paths).not_to include(a_string_including("deprecatable.rb")),
-        "Expected no frame to reference deprecatable.rb, but got:\n#{callstacks.first.map.with_index { |cl, i|
-                                                                       "  FRAME #{i}: #{cl}"
-                                                                     }.join("\n")}"
+      expect(paths).not_to include(a_string_starting_with(Uncruft::GEM_ROOT)),
+        "Expected no frame from the uncruft gem, but got:\n#{callstacks.first.map.with_index { |cl, i|
+                                                               "  FRAME #{i}: #{cl}"
+                                                             }.join("\n")}"
     end
 
     context 'when the legacy method accepts arguments' do
@@ -113,10 +113,10 @@ RSpec.describe Uncruft::Deprecatable do
 
         expect(callstacks.length).to eq(1)
         paths = callstacks.first.map(&:path)
-        expect(paths).not_to include(a_string_including("deprecatable.rb")),
-          "Expected no frame to reference deprecatable.rb, but got:\n#{callstacks.first.map.with_index { |cl, i|
-                                                                         "  FRAME #{i}: #{cl}"
-                                                                       }.join("\n")}"
+        expect(paths).not_to include(a_string_starting_with(Uncruft::GEM_ROOT)),
+          "Expected no frame from the uncruft gem, but got:\n#{callstacks.first.map.with_index { |cl, i|
+                                                                 "  FRAME #{i}: #{cl}"
+                                                               }.join("\n")}"
       end
     end
   end

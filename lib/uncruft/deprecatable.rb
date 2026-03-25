@@ -17,7 +17,7 @@ module Uncruft
           define_method method do |*args, **kwargs, &block|
             Uncruft.deprecator.warn(
               message,
-              caller_locations(1).reject { |loc| loc.path.end_with?("deprecatable.rb") },
+              caller_locations(1).reject { |loc| loc.path.start_with?(Uncruft::GEM_ROOT) },
             )
             super(*args, **kwargs, &block)
           end

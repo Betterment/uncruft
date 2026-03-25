@@ -10,6 +10,8 @@ require 'uncruft/deprecatable'
 require 'uncruft/warning'
 
 module Uncruft
+  GEM_ROOT = "#{File.expand_path('..', __dir__)}/".freeze
+
   class << self
     # http://api.rubyonrails.org/classes/ActiveModel/Type/Boolean.html
     FALSE_VALUES = [false, 0, "0", "f", "F", "false", "FALSE", "off", "OFF"].to_set
