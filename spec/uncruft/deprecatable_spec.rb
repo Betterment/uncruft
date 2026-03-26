@@ -7,6 +7,22 @@ RSpec.describe Uncruft::Deprecatable do
 
   subject { klass.new }
 
+  around do |example|
+    original_behavior = Uncruft.deprecator.behavior
+    example.run
+  ensure
+    Uncruft.deprecator.behavior = original_behavior
+  end
+
+  def capture_callstack
+    callstacks = []
+    Uncruft.deprecator.behavior = ->(_message, callstack, *) {
+      callstacks << callstack
+    }
+    yield
+    callstacks
+  end
+
   describe '.deprecate_attribute' do
     let(:klass) do
       Class.new do
@@ -18,20 +34,28 @@ RSpec.describe Uncruft::Deprecatable do
       end
     end
 
-    it 'applies deprecation warning when setting deprecated attribute' do
-      expect(Uncruft.deprecator).to receive(:warn).once
-        .with("Please stop using this attribute!")
+    it 'does not include deprecatable.rb in the callstack when setting' do
+      callstacks = capture_callstack { subject.first_name = my_name }
 
-      expect(subject.first_name = my_name).to eq my_name
+      expect(callstacks.length).to eq(1)
+      paths = callstacks.first.map(&:path)
+      expect(paths).not_to include(a_string_starting_with(Uncruft::GEM_ROOT)),
+        "Expected no frame from the uncruft gem, but got:\n#{callstacks.first.map.with_index { |cl, i|
+                                                               "  FRAME #{i}: #{cl}"
+                                                             }.join("\n")}"
     end
 
-    it 'applies deprecation warning when getting deprecated attribute' do
+    it 'does not include deprecatable.rb in the callstack when getting' do
       subject.instance_variable_set(:@first_name, my_name)
 
-      expect(Uncruft.deprecator).to receive(:warn)
-        .with("Please stop using this attribute!")
+      callstacks = capture_callstack { subject.first_name }
 
-      expect(subject.first_name).to eq my_name
+      expect(callstacks.length).to eq(1)
+      paths = callstacks.first.map(&:path)
+      expect(paths).not_to include(a_string_starting_with(Uncruft::GEM_ROOT)),
+        "Expected no frame from the uncruft gem, but got:\n#{callstacks.first.map.with_index { |cl, i|
+                                                               "  FRAME #{i}: #{cl}"
+                                                             }.join("\n")}"
     end
   end
 
@@ -48,11 +72,15 @@ RSpec.describe Uncruft::Deprecatable do
       end
     end
 
-    it 'applies deprecation warning when calling the deprecated method' do
-      expect(Uncruft.deprecator).to receive(:warn)
-        .with("Please stop using this method!")
+    it 'does not include deprecatable.rb in the callstack' do
+      callstacks = capture_callstack { subject.legacy_method }
 
-      expect(subject.legacy_method).to eq "Hello Old World!"
+      expect(callstacks.length).to eq(1)
+      paths = callstacks.first.map(&:path)
+      expect(paths).not_to include(a_string_starting_with(Uncruft::GEM_ROOT)),
+        "Expected no frame from the uncruft gem, but got:\n#{callstacks.first.map.with_index { |cl, i|
+                                                               "  FRAME #{i}: #{cl}"
+                                                             }.join("\n")}"
     end
 
     context 'when the legacy method accepts arguments' do
@@ -73,18 +101,22 @@ RSpec.describe Uncruft::Deprecatable do
       end
 
       it 'forwards positional, keyword, and block arguments to the deprecated method' do
-        expect(Uncruft.deprecator).to receive(:warn)
-          .with("Please stop using this method!")
+        callstacks = capture_callstack do
+          result = subject.legacy_method("a positional argument", keyword_argument: "a keyword arg") { "returned from a block" }
 
-        argument = "a positional argument"
-        keyword_arg = "a keyword arg"
-
-        expect(subject.legacy_method(argument, keyword_argument: keyword_arg) { "returned from a block" })
-          .to eq(<<~RESULT)
+          expect(result).to eq(<<~RESULT)
             This is the argument: a positional argument
             This is the keyword_argument: a keyword arg
             And here is the block: returned from a block
           RESULT
+        end
+
+        expect(callstacks.length).to eq(1)
+        paths = callstacks.first.map(&:path)
+        expect(paths).not_to include(a_string_starting_with(Uncruft::GEM_ROOT)),
+          "Expected no frame from the uncruft gem, but got:\n#{callstacks.first.map.with_index { |cl, i|
+                                                                 "  FRAME #{i}: #{cl}"
+                                                               }.join("\n")}"
       end
     end
   end
