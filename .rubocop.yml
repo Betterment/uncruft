@@ -8,7 +8,7 @@ inherit_mode:
 
 AllCops:
   NewCops: enable
-  TargetRubyVersion: 3.2
-  TargetRailsVersion: 7.2
+  TargetRubyVersion: 3.3
+  TargetRailsVersion: 8.0
   Exclude:
     - gemfiles/*.gemfile

@@ -1,8 +1,8 @@
 PATH
   remote: ..
   specs:
-    uncruft (1.1.0)
-      railties (>= 7.2)
+    uncruft (1.2.0)
+      railties (>= 8.0)
 
 GEM
   remote: https://rubygems.org/
