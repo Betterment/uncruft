@@ -13,6 +13,8 @@ module Uncruft
       ["3.3", "8.0"] => [],
       ["3.4", "7.2"] => [],
       ["3.4", "8.0"] => ['prism/polyfill/warn.rb'],
+      ["3.3", "8.1"] => ['prism/polyfill/warn.rb'],
+      ["3.4", "8.1"] => ['prism/polyfill/warn.rb'],
     }.freeze
 
     def self.expected_internal_frames
