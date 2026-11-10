@@ -18,6 +18,8 @@ jobs:
           - gemfiles/rails_8_1.gemfile
     steps:
       - uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3
+        with:
+          persist-credentials: false
       - uses: ruby/setup-ruby@09a7688d3b55cf0e976497ff046b70949eeaccfd # v1.288.0
         env:
           BUNDLE_GEMFILE: ${{ matrix.gemfile }}
