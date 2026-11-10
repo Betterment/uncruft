@@ -7,11 +7,7 @@ module Uncruft
     # Version-pinned: which internal frames are allowed at clocs[0].
     # Empty array = no internal frames expected. Missing key = unknown combo.
     EXPECTED_INTERNAL_FRAMES = {
-      ["3.2", "7.2"] => [],
-      ["3.2", "8.0"] => [],
-      ["3.3", "7.2"] => [],
       ["3.3", "8.0"] => [],
-      ["3.4", "7.2"] => [],
       ["3.4", "8.0"] => ['prism/polyfill/warn.rb'],
       ["3.3", "8.1"] => ['prism/polyfill/warn.rb'],
       ["3.4", "8.1"] => ['prism/polyfill/warn.rb'],
